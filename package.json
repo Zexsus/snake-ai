@@ -1,0 +1,29 @@
+{
+  "name": "game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha test/test-*.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "babelify": "^10.0.0",
+    "browser-sync": "^2.26.0",
+    "browserify": "^16.2.3",
+    "canvas": "^1.6.12",
+    "chai": "^4.2.0",
+    "gulp": "^3.9.1",
+    "jsdom": "^12.1.0",
+    "mocha-chrome": "^1.1.0",
+    "mocha-jsdom": "^2.0.0",
+    "vinyl-source-stream": "^2.0.0"
+  },
+  "dependencies": {
+    "mocha": "^5.2.0"
+  }
+}

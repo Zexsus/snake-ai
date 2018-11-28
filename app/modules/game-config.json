@@ -1,0 +1,12 @@
+{
+  "canvas": {
+    "width": 400,
+    "height": 400
+  },
+  "grid": {
+    "width": 10,
+    "height": 10,
+    "offset": 2,
+    "color": "#00aaff"
+  }
+}

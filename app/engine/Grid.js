@@ -92,12 +92,35 @@ class Grid extends GameObject {
         });
     }
 
-    eachInRow(row, callback){}
+    setupWalls(){
+        let setWallState = (item) => {
+            item.setState(this.engine.getState('wall'));
+        };
 
-    each(calback) {
+        this.eachInRow(0, setWallState);
+        this.eachInRow(this.rowsCount - 1, setWallState);
+        this.eachInColumn(0, setWallState);
+        this.eachInColumn(this.colsCount - 1, setWallState);
+
+        return this;
+    }
+
+    eachInRow(row, callback){
+        for (var column = 0; column < this.colsCount; column++) {
+            callback(this.getItem(row, column), row, column);
+        }
+    }
+
+    eachInColumn(column, callback){
+        for (var row = 0; row < this.rowsCount; row++) {
+            callback(this.getItem(row, column), row, column);
+        }
+    }
+
+    each(callback) {
         for (var row = 0; row < this.rowsCount; row++) {
             for (var column = 0; column < this.colsCount; column++) {
-                calback(this.getItem(row, column), row, column);
+                callback(this.getItem(row, column), row, column);
             }
         }
     }

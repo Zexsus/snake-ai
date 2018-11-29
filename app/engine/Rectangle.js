@@ -25,6 +25,10 @@ class Rectangle extends GameObject {
         this.ctx.fillRect(this.position.x, this.position.y, this.size.width, this.size.height);
     }
 
+    setState(state){
+        this.state = state;
+    }
+
     clear(rect) {
         this.ctx.clearRect(rect.position.x, rect.position.y, rect.size.width, rect.size.height);
     }

@@ -33,6 +33,30 @@ describe("Grid", function () {
                 }
             }
         });
+
+        it('Iterates through all items in row', function(){
+            let row = 0;
+            grid.eachInRow(row, function(item){
+                item.setPosition(600, 1400);
+            });
+
+            for (var column = 0; column < grid.colsCount; column++) {
+                expect(grid.getItem(row, column).position.x).to.be.equal(600);
+                expect(grid.getItem(row, column).position.y).to.be.equal(1400);
+            }
+        });
+
+        it('Iterates through all items in column', function(){
+            let column = 0;
+            grid.eachInColumn(column, function(item){
+                item.setPosition(600, 1400);
+            });
+
+            for (var row = 0; row < grid.rowsCount; row++) {
+                expect(grid.getItem(row, column).position.x).to.be.equal(600);
+                expect(grid.getItem(row, column).position.y).to.be.equal(1400);
+            }
+        });
     });
 
     describe('Items Positions', function () {
@@ -146,10 +170,26 @@ describe("Grid", function () {
         });
 
         it('Exists in top of grid', function(){
-            var wallFlag = false;
+            grid.eachInRow(0, function(item){
+                expect(item.state).to.be.eql(engine.getState('wall'));
+            });
+        });
 
-            grid.each(function(){
+        it('Exists in bottom of grid', function(){
+            grid.eachInRow(9, function(item){
+                expect(item.state).to.be.eql(engine.getState('wall'));
+            });
+        });
 
+        it('Exists in left side of grid', function(){
+            grid.eachInColumn(0, function(item){
+                expect(item.state).to.be.eql(engine.getState('wall'));
+            });
+        });
+
+        it('Exists in right side of grid', function(){
+            grid.eachInColumn(9, function(item){
+                expect(item.state).to.be.eql(engine.getState('wall'));
             });
         });
     });

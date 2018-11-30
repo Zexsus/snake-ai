@@ -54,18 +54,21 @@ describe('BodyPart', function () {
     describe('Body follow', function () {
         it('First move not follow', function () {
             head.move(directions.right);
+            expect(head.position).to.be.eql({x:1, y:0});
             expect(bodyPart1.position).to.be.eql({x: 0, y: 0});
             expect(bodyPart2.position).to.be.eql({x: 0, y: 0});
         });
 
         it('Second move first item of body has last position of head, second item still in the same place', function () {
             head.move(directions.right).move(directions.right);
+            expect(head.position).to.be.eql({x:2, y:0});
             expect(bodyPart1.position).to.be.eql({x: 1, y: 0});
             expect(bodyPart2.position).to.be.eql({x: 0, y: 0});
         });
 
         it('Third move first item of body has last position of head and second item get last position of first item', function () {
             head.move(directions.right).move(directions.right).move(directions.down);
+            expect(head.position).to.be.eql({x:2, y:1});
             expect(bodyPart1.position).to.be.eql({x: 2, y: 0});
             expect(bodyPart2.position).to.be.eql({x: 1, y: 0});
         });
@@ -86,5 +89,10 @@ describe('BodyPart', function () {
             var bodyPart3 = head.recreate();
             expect(bodyPart2.next).to.be.equal(bodyPart3);
         });
+
+        it('Has the same position after recreate', function(){
+            var bodyPart3 = head.recreate();
+            expect(bodyPart2.next.position).to.be.eql(head.position);
+        })
     });
 });

@@ -57,6 +57,37 @@ describe("Grid", function () {
                 expect(grid.getItem(row, column).position.y).to.be.equal(1400);
             }
         });
+        it('Sets multiple items states', function(){
+            let items = [
+                {
+                    position:{
+                        x : 0,
+                        y : 0
+                    },
+                    state: engine.getState("head")
+                },
+                {
+                    position:{
+                        x : 1,
+                        y : 0
+                    },
+                    state: engine.getState("body")
+                },
+                {
+                    position:{
+                        x : 7,
+                        y : 3
+                    },
+                    state: engine.getState("wall")
+                },
+            ];
+
+            grid.setMultipleItemsState(items);
+
+            expect(grid.getItem(0,0).getState()).to.be.eql(engine.getState('head'));
+            expect(grid.getItem(0,1).getState()).to.be.eql(engine.getState('body'));
+            expect(grid.getItem(3,7).getState()).to.be.eql(engine.getState('wall'));
+        });
     });
 
     describe('Items Positions', function () {

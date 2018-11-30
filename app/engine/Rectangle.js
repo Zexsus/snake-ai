@@ -25,6 +25,14 @@ class Rectangle extends GameObject {
         this.ctx.fillRect(this.position.x, this.position.y, this.size.width, this.size.height);
     }
 
+    /**
+     *
+     * @returns {GameObjectState}
+     */
+    getState(){
+        return this.state;
+    }
+
     setState(state){
         this.state = state;
     }

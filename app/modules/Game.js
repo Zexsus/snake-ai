@@ -13,15 +13,13 @@ class Game {
     }
 
     awake(){
-        this.engine = null;
-        this.grid = null;
-
         this.engine = new Engine({
             document: document,
             fps: 30,
             states: [
                 new GameObjectState('default', '#a4f2ff'),
                 new GameObjectState('wall', '#003b62'),
+                new GameObjectState('food', '#fffa00'),
                 new GameObjectState('body', '#00a842'),
                 new GameObjectState('head', '#d75600'),
             ],
@@ -39,6 +37,7 @@ class Game {
         this.grid = new Grid(this.engine, 32, 32);
         this.grid.setupWalls().clear();
         this.engine.centeralize(this.grid, this.engine.canvas);
+        this.generateFood();
         this.grid.draw();
 
         if(!this.gameAwaken){
@@ -58,7 +57,6 @@ class Game {
 
     }
 
-
     initSnake(){
         let snake = new Snake();
         snake.head.setPosition({x: 10, y: 10});
@@ -71,8 +69,11 @@ class Game {
         this.isRunning = false;
         this.restart();
     }
+
     restart(){
         this.snake = this.initSnake();
+        this.grid.resetStatesWithout(['wall']);
+        this.generateFood();
         this.grid.clear();
         this.grid.draw();
         this.isRunning = true;
@@ -86,14 +87,31 @@ class Game {
         this.counter++;
     }
 
-    updatePerFrame(){
-        this.grid.resetStatesWithoutWall();
-        this.grid.clear();
+    updatePerFrame() {
+        this.handleMotion();
+        this.resetScene();
+        this.drawScene();
+    }
+
+    handleMotion(){
         this.snake.move();
         this.handleCollisions(this.snake, this.grid, this.engine);
+    }
+
+    resetScene(){
+        this.grid.resetStatesWithout(['wall', 'food']);
+        this.grid.clear();
+    }
+
+    drawScene(){
         let snakeBodyArrayForGrid = this.getSnakeBodyArrayForGrid(this.snake);
         this.grid.setMultipleItemsState(snakeBodyArrayForGrid.reverse());
         this.grid.draw();
+    }
+
+    generateFood(){
+        let foodItem = this.grid.getRandomItemWithout(['wall', 'head', 'body', 'food']);
+        foodItem.setState(this.engine.getState('food'));
     }
 
     getSnakeBodyArrayForGrid(snake) {
@@ -126,13 +144,31 @@ class Game {
 
     handleCollisions(){
         let item = this.grid.getItem(this.snake.head.position.y, this.snake.head.position.x);
-        if(item.state === this.engine.getState('wall')){
+
+        if(item.hasState('wall')){
             this.onWallCollision();
         }
+
+        if(item.hasState('body')){
+            this.onBodyCollision();
+        }
+
+        if(item.hasState('food')){
+            this.onFoodCollision();
+        }
+    }
+
+    onBodyCollision(){
+        this.over();
     }
 
     onWallCollision(){
         this.over();
+    }
+
+    onFoodCollision(){
+        this.snake.grow();
+        this.generateFood();
     }
 }
 

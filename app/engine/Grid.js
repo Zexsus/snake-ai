@@ -101,11 +101,31 @@ class Grid extends GameObject {
         });
     }
 
-    resetStatesWithoutWall(){
+    /**
+     *
+     * @param {Array.<string>} states
+     */
+    resetStatesWithout(states){
         this.each((item) => {
-            if(item.getState() !== this.engine.getState("wall"))
+            if(states.indexOf(item.getState().name) === -1)
                 item.setState(this.engine.getState("default"));
         });
+    }
+
+    getItemsWithoutStates(states){
+        let itemsWithoutStates = [];
+        this.each((item) => {
+            if (states.indexOf(item.getState().name) === -1)
+                itemsWithoutStates.push(item);
+        });
+
+        return itemsWithoutStates;
+    }
+
+    getRandomItemWithout(states){
+        let items = this.getItemsWithoutStates(states);
+        let randomItemIndex = Math.floor((Math.random() * items.length) + 0);
+        return items[randomItemIndex];
     }
 
     setupWalls(){

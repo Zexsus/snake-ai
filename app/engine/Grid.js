@@ -24,6 +24,9 @@ class Grid extends GameObject {
         }
     }
 
+    /*
+     * @returns {Rectangle}
+     */
     getItems() {
         return this.items;
     }
@@ -56,6 +59,12 @@ class Grid extends GameObject {
         }
     }
 
+    /**
+     *
+     * @param {number} row
+     * @param {number} col
+     * @returns {*}
+     */
     getItem(row, col) {
         return this.getItems()[row][col];
     }
@@ -92,6 +101,13 @@ class Grid extends GameObject {
         });
     }
 
+    resetStatesWithoutWall(){
+        this.each((item) => {
+            if(item.getState() !== this.engine.getState("wall"))
+                item.setState(this.engine.getState("default"));
+        });
+    }
+
     setupWalls(){
         let setWallState = (item) => {
             item.setState(this.engine.getState('wall'));
@@ -103,6 +119,17 @@ class Grid extends GameObject {
         this.eachInColumn(this.colsCount - 1, setWallState);
 
         return this;
+    }
+
+    /**
+     *
+     * @param {Array.<Object>} items
+     */
+    setMultipleItemsState(items){
+        items.forEach((value) => {
+            let item = this.getItem(value.position.y, value.position.x);
+            item.setState(value.state);
+        });
     }
 
     eachInRow(row, callback){
@@ -117,7 +144,11 @@ class Grid extends GameObject {
         }
     }
 
-    each(callback) {
+    /**
+     *
+     * @param callback - includes {Rectangle} param
+     */
+    each(callback){
         for (var row = 0; row < this.rowsCount; row++) {
             for (var column = 0; column < this.colsCount; column++) {
                 callback(this.getItem(row, column), row, column);

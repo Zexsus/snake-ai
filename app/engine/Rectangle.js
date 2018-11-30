@@ -37,6 +37,15 @@ class Rectangle extends GameObject {
         this.state = state;
     }
 
+    /**
+     *
+     * @param {string} name
+     * @returns {boolean}
+     */
+    hasState(name){
+        return (this.state === this.engine.getState(name));
+    }
+
     clear(rect) {
         this.ctx.clearRect(rect.position.x, rect.position.y, rect.size.width, rect.size.height);
     }

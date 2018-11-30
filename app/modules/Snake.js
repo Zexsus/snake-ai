@@ -26,7 +26,14 @@ class Snake {
     }
 
     setDirection(direction){
-        this.direction = direction;
+        if(!this.isProperDirection(direction))
+            console.error("You are trying to move snake in the oposite direction");
+        else
+            this.direction = direction;
+    }
+
+    isProperDirection(direction){
+        return (this.direction === null || ( direction.x + this.direction.x !== 0 && direction.y + this.direction.y !== 0));
     }
 
     grow(){

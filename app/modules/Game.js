@@ -5,16 +5,18 @@ const config = require('./game-config.json');
 const directions = require('./Directions.js');
 const Snake = require('./Snake.js');
 
+
 class Game {
-    constructor(){
-        this.isRunning = false;
+    constructor(document){
+       this.isRunning = false;
+       this.document = document;
        if(!this.gameAwaken) this.awake();
        this.start();
     }
 
     awake(){
         this.engine = new Engine({
-            document: document,
+            document: this.document,
             fps: 30,
             states: [
                 new GameObjectState('default', '#a4f2ff'),

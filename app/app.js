@@ -1,10 +1,15 @@
 const Game = require('./modules/Game.js');
 const directions = require('./modules/Directions.js');
+const GameStatistics = require('./modules/GameStatistics.js');
 
 
-let game = new Game();
-
+let game = new Game(document);
+let gameStats = new GameStatistics(game.snake, game.grid);
 initUserInput(game);
+
+game.engine.update(function(){
+    // console.log(gameStats.getStatistics());
+});
 
 /**
  *

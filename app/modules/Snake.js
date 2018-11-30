@@ -30,6 +30,8 @@ class Snake {
             console.error("You are trying to move snake in the oposite direction");
         else
             this.direction = direction;
+
+        return this;
     }
 
     isProperDirection(direction){

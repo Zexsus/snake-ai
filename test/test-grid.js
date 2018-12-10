@@ -1,6 +1,7 @@
 var expect = require("chai").expect;
 let engine = require('./mock/mock-engine.js');
 const Grid = require('../app/engine/Grid.js');
+const Vector2D = require('../app/engine/Vector2D.js');
 const config = require('../app/modules/game-config.json');
 
 let grid = null;
@@ -8,11 +9,11 @@ let grid = null;
 describe("Grid", function () {
 
     beforeEach(function () {
-        grid = new Grid(engine, 10, 10);
-        firstItem = grid.getItem(0, 0);
-        secondItemInRow = grid.getItem(0, 1);
-        secondItemInColumn = grid.getItem(1, 0);
-        lastItem = grid.getItem(9, 9);
+        grid = new Grid(engine, new Vector2D(0, 0), new Vector2D(10, 10));
+        firstItem = grid.getItem(new Vector2D(0, 0));
+        secondItemInRow = grid.getItem(new Vector2D(1, 0));
+        secondItemInColumn = grid.getItem(new Vector2D(0, 1));
+        lastItem = grid.getItem(new Vector2D(9, 9));
     });
 
 
@@ -23,13 +24,13 @@ describe("Grid", function () {
     describe('Each function', function () {
         it('Iterates through all items', function () {
             grid.each(function (item) {
-                item.setPosition(600, 1400);
+                item.setPosition(new Vector2D(600, 1400));
             });
 
-            for (var row = 0; row < grid.rowsCount; row++) {
-                for (var column = 0; column < grid.colsCount; column++) {
-                    expect(grid.getItem(row, column).position.x).to.be.equal(600);
-                    expect(grid.getItem(row, column).position.y).to.be.equal(1400);
+            for (var row = 0; row < grid.size.y; row++) {
+                for (var column = 0; column < grid.size.x; column++) {
+                    expect(grid.getItem(new Vector2D(row, column)).position.x).to.be.equal(600);
+                    expect(grid.getItem(new Vector2D(row, column)).position.y).to.be.equal(1400);
                 }
             }
         });
@@ -37,80 +38,72 @@ describe("Grid", function () {
         it('Iterates through all items in row', function(){
             let row = 0;
             grid.eachInRow(row, function(item){
-                item.setPosition(600, 1400);
+                item.setPosition(new Vector2D(600, 1400));
             });
 
             for (var column = 0; column < grid.colsCount; column++) {
-                expect(grid.getItem(row, column).position.x).to.be.equal(600);
-                expect(grid.getItem(row, column).position.y).to.be.equal(1400);
+                expect(grid.getItem(new Vector2D(row, column)).position.x).to.be.equal(600);
+                expect(grid.getItem(new Vector2D(row, column)).position.y).to.be.equal(1400);
             }
         });
 
         it('Iterates through all items in column', function(){
             let column = 0;
             grid.eachInColumn(column, function(item){
-                item.setPosition(600, 1400);
+                item.setPosition(new Vector2D(600, 1400));
             });
 
             for (var row = 0; row < grid.rowsCount; row++) {
-                expect(grid.getItem(row, column).position.x).to.be.equal(600);
-                expect(grid.getItem(row, column).position.y).to.be.equal(1400);
+                expect(grid.getItem(new Vector2D(row, column)).position.x).to.be.equal(600);
+                expect(grid.getItem(new Vector2D(row, column)).position.y).to.be.equal(1400);
             }
         });
         it('Sets multiple items states', function(){
             let items = [
                 {
-                    position:{
-                        x : 0,
-                        y : 0
-                    },
+                    position:new Vector2D(0, 0),
                     state: engine.getState("head")
                 },
                 {
-                    position:{
-                        x : 1,
-                        y : 0
-                    },
+                    position:new Vector2D(0, 1),
                     state: engine.getState("body")
                 },
                 {
-                    position:{
-                        x : 7,
-                        y : 3
-                    },
+                    position: new Vector2D(3, 7),
                     state: engine.getState("wall")
                 },
             ];
 
             grid.setMultipleItemsState(items);
 
-            expect(grid.getItem(0,0).getState()).to.be.eql(engine.getState('head'));
-            expect(grid.getItem(0,1).getState()).to.be.eql(engine.getState('body'));
-            expect(grid.getItem(3,7).getState()).to.be.eql(engine.getState('wall'));
+            expect(grid.getItem(new Vector2D(0,0)).getState()).to.be.eql(engine.getState('head'));
+            expect(grid.getItem(new Vector2D(0,1)).getState()).to.be.eql(engine.getState('body'));
+            expect(grid.getItem(new Vector2D(3,7)).getState()).to.be.eql(engine.getState('wall'));
         });
     });
 
     describe('Items Positions', function () {
         it('Calculate position for first element', function () {
-            let positionForFirstElement = grid.getPositionForItem(0, 0);
+            let positionForFirstElement = grid.getPositionForItem(new Vector2D(0, 0));
             expect(positionForFirstElement.x).to.be.equal(0);
             expect(positionForFirstElement.y).to.be.equal(0);
 
-            grid.setPosition(100, 250);
+            grid.setPosition(new Vector2D(100, 250));
 
-            positionForFirstElement = grid.getPositionForItem(0, 0);
+            positionForFirstElement = grid.getPositionForItem(new Vector2D(0, 0));
             expect(positionForFirstElement.x).to.be.equal(100);
             expect(positionForFirstElement.y).to.be.equal(250);
+
         });
 
         it('Calculate position for second element in row', function () {
-            let positionForSecondElementInRow = grid.getPositionForItem(0, 1);
+            let positionForSecondElementInRow = grid.getPositionForItem(new Vector2D(1, 0));
             expect(positionForSecondElementInRow.x).to.be.equal(config.grid.offset + config.grid.width);
             expect(positionForSecondElementInRow.y).to.be.equal(0);
         });
 
         it('Calculate position for second element in column', function () {
-            let positionForSecondElementInColumn = grid.getPositionForItem(1, 0);
+            let positionForSecondElementInColumn = grid.getPositionForItem(new Vector2D(0, 1));
             expect(positionForSecondElementInColumn.x).to.be.equal(0);
             expect(positionForSecondElementInColumn.y).to.be.equal(config.grid.offset + config.grid.width);
         });
@@ -118,8 +111,8 @@ describe("Grid", function () {
 
     describe('Moving', function () {
         beforeEach(function () {
-            grid.setPosition(40, 40);
-            grid.setPosition(20, 20);
+            grid.setPosition(new Vector2D(40, 40));
+            grid.setPosition(new Vector2D(20, 20));
         });
 
         it('Moves after set position', function () {
@@ -134,19 +127,19 @@ describe("Grid", function () {
 
 
         it('Second item in row moves after set position', function () {
-            expect(secondItemInRow.position.x).to.be.equal(20 + grid.itemsOffset + grid.itemsSize.width);
+            expect(secondItemInRow.position.x).to.be.equal(20 + grid.itemsOffset + grid.itemsSize.x);
             expect(secondItemInRow.position.y).to.be.equal(20);
         });
 
         it('Second item in col moves after set position', function () {
             expect(secondItemInColumn.position.x).to.be.equal(20);
-            expect(secondItemInColumn.position.y).to.be.equal(20 + grid.itemsOffset + grid.itemsSize.height);
+            expect(secondItemInColumn.position.y).to.be.equal(20 + grid.itemsOffset + grid.itemsSize.y);
         });
     });
 
     it('Has proper size', function () {
-        expect(grid.size.width).to.be.equal((config.grid.width + config.grid.offset) * 10 - config.grid.offset);
-        expect(grid.size.height).to.be.equal((config.grid.height + config.grid.offset) * 10 - config.grid.offset);
+        expect(grid.getDisplaySize().x).to.be.equal((config.grid.width + config.grid.offset) * 10 - config.grid.offset);
+        expect(grid.getDisplaySize().y).to.be.equal((config.grid.height + config.grid.offset) * 10 - config.grid.offset);
     });
 
 
@@ -157,11 +150,11 @@ describe("Grid", function () {
         });
 
         it('Has width from config', function () {
-            expect(firstItem.size.width).to.be.equal(config.grid.width);
+            expect(firstItem.size.x).to.be.equal(config.grid.width);
         });
 
         it('Has height from config', function () {
-            expect(firstItem.size.height).to.be.equal(config.grid.height);
+            expect(firstItem.size.y).to.be.equal(config.grid.height);
         });
     });
 

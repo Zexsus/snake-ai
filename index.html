@@ -2,9 +2,55 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:500" rel="stylesheet">
     <title>Full tested snake </title>
+    <style>
+        body{
+            font-family: 'Roboto', sans-serif;
+        }
+
+        th{
+            border-bottom: 1px solid #007f00;
+        }
+
+        th, td{
+            padding: 5px 10px;
+        }
+    </style>
 </head>
 <body>
+
+    <h2>Stats</h2>
+
+    <table>
+        <tr>
+            <th>
+                Wall distances
+            </th>
+
+            <th>
+                Body distances
+            </th>
+
+            <th>
+                Food distances
+            </th>
+        </tr>
+
+        <tr>
+            <td id="wall-distances">
+
+            </td>
+
+            <td id="body-distances">
+
+            </td>
+
+            <td id="food-distances">
+
+            </td>
+        </tr>
+    </table>
 </body>
 <script src="dist/app.js"></script>
 </html>

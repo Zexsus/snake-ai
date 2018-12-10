@@ -2,12 +2,10 @@ let expect = require("chai").expect;
 let engine = require('./mock/mock-engine.js');
 
 const Rectangle = require('../app/engine/Rectangle.js');
+const Vector2D = require('../app/engine/Vector2D.js');
 
 describe("Rectangle", function () {
-    let rectangle = new Rectangle(engine, {
-        x: 0, y: 10, width: 100, height: 300,
-        state: engine.getState('default')
-    });
+    let rectangle = new Rectangle(engine, new Vector2D(0, 10), new Vector2D(100, 300), engine.getState('default'));
 
     it('Has proper position', function () {
         expect(rectangle.position.x).to.be.equal(0);
@@ -16,8 +14,8 @@ describe("Rectangle", function () {
 
 
     it('Has proper size', function () {
-        expect(rectangle.size.width).to.be.equal(100);
-        expect(rectangle.size.height).to.be.equal(300);
+        expect(rectangle.size.x).to.be.equal(100);
+        expect(rectangle.size.y).to.be.equal(300);
     });
 
     it("Draws itself", function () {
@@ -28,7 +26,7 @@ describe("Rectangle", function () {
     });
 
     it('Have proper position after move', function () {
-        rectangle.move(20, 70);
+        rectangle.move(new Vector2D(20, 70));
         expect(rectangle.position.x).to.be.equal(20);
         expect(rectangle.position.y).to.be.equal(80);
 

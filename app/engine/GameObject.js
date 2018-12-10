@@ -1,38 +1,58 @@
 class GameObject {
-    constructor(engine) {
+
+    /**
+     * @param {Engine} engine
+     * @param {Vector2D} position
+     * @param {Vector2D} size
+     */
+    constructor(engine, position, size) {
         this.engine = engine;
-        this.position = {
-            x: null,
-            y: null
-        };
-
-        this.size = {
-            width: null,
-            height: null
-        };
+        this.position = position;
+        this.size = size;
     }
 
-    setPosition(x, y) {
-        this.position.x = x;
-        this.position.y = y;
+    /**
+     * @param {Vector2D} position
+     */
+    setPosition(position) {
+        this.position = position;
     }
 
-    setSize(width, height) {
-        this.size.width = width;
-        this.size.height = height;
+    /**
+     * @param {Vector2D} size
+     */
+    setSize(size) {
+        this.size = size;
     }
 
+    /**
+     * @returns {Vector2D}
+     */
+    getSize(){
+        return this.size;
+    }
 
-    move(x, y) {
+    /**
+     * @returns {Vector2D}
+     */
+    getDisplaySize(){
+        return this.size;
+    }
+
+    /**
+     * @param {Vector2D} vector
+     */
+    move(vector) {
         this.clear(this);
         this.lastPosition = this.position;
-
-        this.position.x += x;
-        this.position.y += y;
+        this.position.add(vector);
 
         this.draw();
     }
 
+    /**
+     * @param {GameObjectState} state
+     */
     changeState(state) {
         this.clear(this);
         this.state = state;

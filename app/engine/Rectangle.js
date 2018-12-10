@@ -1,32 +1,26 @@
-GameObject = require("./GameObject.js");
+const GameObject = require("./GameObject.js");
+const Vector2D = require('./Vector2D.js');
 
 class Rectangle extends GameObject {
-    constructor(engine, params) {
-        super(engine);
+
+    /**
+     * @param {Engine} engine
+     * @param {Vector2D} position
+     * @param {Vector2D} size
+     * @param {GameObjectState} state
+     */
+    constructor(engine, position, size, state) {
+        super(engine, position, size);
         this.ctx = this.engine.getContext('2d');
-        this.position = {
-            x: params.x,
-            y: params.y
-        };
-
-        this.lastPosition = this.position;
-
-        this.size = {
-            width: params.width,
-            height: params.height
-        };
-
-        this.state = params.state;
+        this.state = state;
     }
-
 
     draw() {
         this.ctx.fillStyle = this.state.color;
-        this.ctx.fillRect(this.position.x, this.position.y, this.size.width, this.size.height);
+        this.ctx.fillRect(this.position.x, this.position.y, this.size.x, this.size.y);
     }
 
     /**
-     *
      * @returns {GameObjectState}
      */
     getState(){
@@ -38,7 +32,6 @@ class Rectangle extends GameObject {
     }
 
     /**
-     *
      * @param {string} name
      * @returns {boolean}
      */
@@ -47,7 +40,7 @@ class Rectangle extends GameObject {
     }
 
     clear(rect) {
-        this.ctx.clearRect(rect.position.x, rect.position.y, rect.size.width, rect.size.height);
+        this.ctx.clearRect(rect.position.x, rect.position.y, rect.size.x, rect.size.y);
     }
 }
 

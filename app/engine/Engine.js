@@ -1,7 +1,15 @@
 const Loop = require('./Loop.js');
-const Rectangle = require('./Rectangle.js');
+const GameObject = require('./GameObject.js');
+const Vector2D = require('./Vector2D.js');
 
 class Engine {
+
+    /**
+     * @param {Object} params - params to setup engine
+     * @param {Array.<GameObjectState>} params.states
+     * @param {HTMLDocument} params.document
+     * @param {int} params.fps
+     */
     constructor(params) {
         this.canvas = this.prepareCanvas(params.document, params.canvasSettings);
         this.ctx = this.getContext();
@@ -19,6 +27,10 @@ class Engine {
         return this.canvas.getContext('2d');
     };
 
+    /**
+     * @param {string} name
+     * @returns {GameObjectState}
+     */
     getState(name) {
         let statesWithName = this.states.filter((item) => {
             return (item.name === name);
@@ -40,24 +52,23 @@ class Engine {
         return canvas;
     };
 
-    createRectangle(params) {
-        let rect = new Rectangle(this, params);
-        rect.draw();
-        return rect;
-    }
-
+    /**
+     * @param {GameObject} object
+     * @param {GameObject | HTMLCanvasElement} toObject
+     */
     centeralize(object, toObject) {
+        let position  = new Vector2D(0, 0);
         if (object instanceof GameObject && !(toObject instanceof GameObject)) {
-            object.setPosition(
-                ((toObject.width) - object.size.width) / 2,
-                ((toObject.height) - object.size.height) / 2
-            )
+            let x = ((toObject.width) - object.getDisplaySize().x) / 2;
+            let y = ((toObject.height) - object.getDisplaySize().y) / 2;
+            position = new Vector2D(x, y);
         } else {
-            object.setPosition(
-                ((toObject.size.width) - object.size.width) / 2,
-                ((toObject.size.height) - object.size.height) / 2
-            )
+            let x = ((toObject.getDisplaySize().x) - object.getDisplaySize().x) / 2;
+            let y = ((toObject.getDisplaySize().y) - object.getDisplaySize().y) / 2;
+            position = new Vector2D(x, y);
         }
+        object.setPosition(position);
+
     }
 }
 

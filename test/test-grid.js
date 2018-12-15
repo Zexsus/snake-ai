@@ -36,26 +36,44 @@ describe("Grid", function () {
         });
 
         it('Iterates through all items in row', function(){
-            let row = 0;
-            grid.eachInRow(row, function(item){
+            let y = 0;
+            grid.eachInRow(y, function(item){
                 item.setPosition(new Vector2D(600, 1400));
             });
 
-            for (var column = 0; column < grid.colsCount; column++) {
-                expect(grid.getItem(new Vector2D(row, column)).position.x).to.be.equal(600);
-                expect(grid.getItem(new Vector2D(row, column)).position.y).to.be.equal(1400);
+            for (var x = 0; x < grid.colsCount; x++) {
+                expect(grid.getItem(new Vector2D(x, y)).position.x).to.be.equal(600);
+                expect(grid.getItem(new Vector2D(x, y)).position.y).to.be.equal(1400);
             }
         });
 
+        it('In the eachInRow function increments x parameter', function(){
+            let x = 0;
+            grid.eachInRow(3, function(item){
+                x = item.getPositionInGrid().x;
+            });
+
+            expect(x).to.be.equal(9);
+        });
+
+        it('In the eachInColumn function increments y parameter', function(){
+            let y = 0;
+            grid.eachInColumn(3, function(item){
+                y = item.getPositionInGrid().y;
+            });
+
+            expect(y).to.be.equal(9);
+        });
+
         it('Iterates through all items in column', function(){
-            let column = 0;
-            grid.eachInColumn(column, function(item){
+            let x = 0;
+            grid.eachInColumn(x, function(item){
                 item.setPosition(new Vector2D(600, 1400));
             });
 
-            for (var row = 0; row < grid.rowsCount; row++) {
-                expect(grid.getItem(new Vector2D(row, column)).position.x).to.be.equal(600);
-                expect(grid.getItem(new Vector2D(row, column)).position.y).to.be.equal(1400);
+            for (var y = 0; y < grid.rowsCount; y++) {
+                expect(grid.getItem(new Vector2D(x, y)).position.x).to.be.equal(600);
+                expect(grid.getItem(new Vector2D(x, y)).position.y).to.be.equal(1400);
             }
         });
         it('Sets multiple items states', function(){

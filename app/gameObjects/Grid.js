@@ -195,13 +195,13 @@ class Grid extends GameObject {
     }
 
     /**
-     * @param {number} row
+     * @param {number} y
      * @param {function(GridItem)}  callback
      * @returns {Grid}
      */
-    eachInRow(row, callback){
-        for (var column = 0; column < this.colsCount; column++) {
-            let itemPosition = new Vector2D(row, column);
+    eachInRow(y, callback){
+        for (var x = 0; x < this.colsCount; x++) {
+            let itemPosition = new Vector2D(x, y);
             callback(this.getItem(itemPosition));
         }
 
@@ -209,13 +209,13 @@ class Grid extends GameObject {
     }
 
     /**
-     * @param {number} column
+     * @param {number} x
      * @param {function(GridItem)} callback
      * @returns {Grid}
      */
-    eachInColumn(column, callback){
-        for (var row = 0; row < this.rowsCount; row++) {
-            let itemPosition = new Vector2D(row, column);
+    eachInColumn(x, callback){
+        for (var y = 0; y < this.rowsCount; y++) {
+            let itemPosition = new Vector2D(x, y);
             callback(this.getItem(itemPosition));
         }
 

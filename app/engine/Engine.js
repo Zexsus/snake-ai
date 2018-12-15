@@ -1,5 +1,5 @@
 const Loop = require('./Loop.js');
-const GameObject = require('./GameObject.js');
+const GameObject = require('../gameObjects/GameObject.js');
 const Vector2D = require('./Vector2D.js');
 
 class Engine {

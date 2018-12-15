@@ -62,7 +62,6 @@ class Snake {
         // push last element
         body.push(actualItem);
 
-
         return body;
     }
 }

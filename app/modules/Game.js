@@ -1,10 +1,11 @@
 const GameObjectState = require("../engine/GameObjectState.js");
 const Engine = require("../engine/Engine.js");
-const Grid = require("../engine/Grid.js");
+const Grid = require("../gameObjects/Grid.js");
 const Vector2D = require("../engine/Vector2D.js");
 const config = require('./game-config.json');
 const directions = require('./Directions.js');
 const Snake = require('./Snake.js');
+const GridSnakeInterface = require('./GridSnakeInterface.js');
 
 
 class Game {
@@ -84,7 +85,15 @@ class Game {
     initSnake(){
         let snake = new Snake();
         snake.head.setPosition(new Vector2D(10, 10));
-        snake.grow().grow().grow();
+        snake.grow().grow().grow().grow().grow().grow().grow()
+            .grow().grow().grow().grow()
+            .grow().grow().grow().grow()
+            .grow().grow().grow().grow()
+            .grow().grow().grow().grow()
+            .grow().grow().grow().grow()
+            .grow().grow().grow().grow()
+            .grow().grow().grow().grow()
+            .grow().grow().grow().grow().grow().grow().grow().grow();
         snake.setDirection(directions.right);
 
         return snake;
@@ -129,7 +138,7 @@ class Game {
     }
 
     drawScene(){
-        let snakeBodyArrayForGrid = this.getSnakeBodyArrayForGrid(this.snake);
+        let snakeBodyArrayForGrid = this.getSnakeForGrid(this.snake);
         this.grid.setMultipleItemsState(snakeBodyArrayForGrid.reverse());
         this.grid.draw();
     }
@@ -140,31 +149,19 @@ class Game {
         this.foodItem = foodItem;
     }
 
-    getSnakeBodyArrayForGrid(snake) {
-        let snakeBody = snake.getFullBody();
-        let preparedGridSnake = [
-            {
-                position: {
-                    x: snake.head.position.x,
-                    y: snake.head.position.y
-                },
-                state: this.engine.getState('head')
-            }
-        ];
+    /**
+     *
+     * @param {Snake} snake
+     * @returns {Array.<GridSnakeInterface>}
+     */
+    getSnakeForGrid(snake) {
+        let preparedGridSnake = [ new GridSnakeInterface(snake.head.position, this.engine.getState("head")) ];
 
-
-        snakeBody.forEach((value, index) => {
+        snake.getFullBody().forEach((value, index) => {
             if(index === 0) return;
-            preparedGridSnake.push(
-                {
-                    position: {
-                        x: value.position.x,
-                        y: value.position.y
-                    },
-                    state: this.engine.getState('body')
-                }
-            )
+            preparedGridSnake.push(new GridSnakeInterface(value.position, this.engine.getState("body")))
         });
+
        return preparedGridSnake;
     }
 

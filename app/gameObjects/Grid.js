@@ -1,5 +1,5 @@
 const GameObject = require("./GameObject.js");
-const Vector2D = require('./Vector2D.js');
+const Vector2D = require('../engine/Vector2D.js');
 const GridItem = require('./GridItem.js');
 const config = require('../modules/game-config.json');
 

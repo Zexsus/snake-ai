@@ -1,6 +1,6 @@
 var expect = require("chai").expect;
 let engine = require('./mock/mock-engine.js');
-const Rectangle = require('../app/engine/Rectangle.js');
+const Rectangle = require('../app/gameObjects/Rectangle.js');
 const Vector2D = require('../app/engine/Vector2D.js');
 
 describe("Engine", function () {

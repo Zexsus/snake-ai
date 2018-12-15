@@ -1,4 +1,4 @@
-const Vector2D = require('./Vector2D.js');
+const Vector2D = require('../engine/Vector2D.js');
 const Rectangle = require('./Rectangle.js');
 
 class GridItem extends Rectangle{

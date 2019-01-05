@@ -19,6 +19,14 @@ class Vector2D{
 
         return this;
     }
+
+    /**
+     * @param {Vector2D} vector
+     * @returns {Boolean}
+     */
+    isEqual(vector){
+        return this.x === vector.x && this.y === vector.y;
+    }
 }
 
 module.exports = Vector2D;

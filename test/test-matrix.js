@@ -14,6 +14,16 @@ describe("Matrix", function () {
        expect(matrix.matrix[0].length).to.be.equal(10);
     });
 
+    it('Returns value by vector2D position', function(){
+        matrix.set(new Vector2D(0, 0), 5);
+        expect(matrix.get(new Vector2D(0, 0))).to.be.equal(5);
+    });
+
+    it('Returns value by parameters', function(){
+        matrix.set(new Vector2D(0, 0), 5);
+        expect(matrix.get(0, 0)).to.be.equal(5);
+    });
+
     describe('Calculates', function(){
         beforeEach(function(){
             matrix.set(new Vector2D(0, 0), 5);
@@ -153,12 +163,68 @@ describe("Matrix", function () {
         let values = [10, 5, 12, 10];
         smallMatrix.setValuesFromArray(values);
 
-        let matrixWithBias = smallMatrix.addBias();
+        let matrixWithBias = smallMatrix.getWithBias();
 
         for(let i = 0; i < values.length; i++){
             expect(matrixWithBias.get(i, 0)).to.be.equal(values[i]);
         }
         expect(matrixWithBias.get(4, 0)).to.be.equal(1);
+    });
+
+    it('Calculates sigmoid of matrix | Activate matrix', function(){
+        let smallMatrix = new Matrix(new Vector2D(4, 4));
+        let values = [  10, 5, 1234, 10,
+                        4, 13, 12, 11,
+                        14, 12, 44, -20121,
+                        1, 111, 120000, 344];
+        smallMatrix.setValuesFromArray(values);
+        let activatedMatrix = smallMatrix.getActivated();
+
+        activatedMatrix.foreach((number) => (
+            expect(number).to.be.within(0, 1)
+        ));
+    });
+
+    it('Returns matrix without last row', function(){
+        let smallMatrix = new Matrix(new Vector2D(4, 4));
+        let values = [  10, 5, 12, 10,
+                        4, 13, 12, 11,
+                        14, 12, 44, 121,
+                        1, 111, 22, 344];
+
+        smallMatrix.setValuesFromArray(values);
+
+        let matrixWithoutLastRow = smallMatrix.getWithoutLastRow();
+        expect(matrixWithoutLastRow.size.y).to.be.equal(smallMatrix.size.y - 1);
+        expect(matrixWithoutLastRow.matrix.length).to.be.equal(smallMatrix.size.y - 1);
+    });
+
+    it('Mutate', function(){
+        let smallMatrix = new Matrix(new Vector2D(4, 4));
+        let values = [  10, 5, 12, 10,
+            4, 13, 12, 11,
+            14, 12, 44, 121,
+            1, 111, 22, 344];
+
+        smallMatrix.setValuesFromArray(values);
+
+        smallMatrix.mutate(0.5);
+    });
+
+    it('Clone itself', function(){
+        let smallMatrix = new Matrix(new Vector2D(4, 4));
+        let values = [  10, 5, 12, 10,
+                        4, 13, 12, 11,
+                        14, 12, 44, 121,
+                        1, 111, 22, 344];
+
+        smallMatrix.setValuesFromArray(values);
+
+        clone = smallMatrix.clone();
+
+        clone.foreach((value, matrix, position) => {
+           expect(clone.get(position)).to.be.equal(smallMatrix.get(position));
+        });
     });
 
     it('Randomize', function(){

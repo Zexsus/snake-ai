@@ -123,6 +123,44 @@ describe("Matrix", function () {
         expect(singleColumnMatrix.matrix[0][0]).to.be.equal(10);
     });
 
+    it('Gets values from array', function(){
+        let smallMatrix = new Matrix(new Vector2D(4, 4));
+        let values = [  10, 5, 12, 10,
+                        4, 13, 12, 11,
+                        14, 12, 44, 121,
+                        1, 111, 22, 344];
+        smallMatrix.setValuesFromArray(values);
+        expect(smallMatrix.get(0, 0)).to.be.equal(10);
+        expect(smallMatrix.get(3, 1)).to.be.equal(11);
+        smallMatrix.foreach((number, matrix, position) => {
+            expect(number).to.be.equal(values[position.x + (position.y * smallMatrix.size.x)]);
+        })
+    });
+
+    it('Returns self as array', function(){
+        let smallMatrix = new Matrix(new Vector2D(4, 4));
+        let values = [  10, 5, 12, 10,
+                        4, 13, 12, 11,
+                        14, 12, 44, 121,
+                        1, 111, 22, 344];
+
+        smallMatrix.setValuesFromArray(values);
+        expect(smallMatrix.toArray()).to.be.eql(values);
+    });
+
+    it('Returns matrix with addictional bias for single row matrix', function(){
+        let smallMatrix = new Matrix(new Vector2D(4, 1));
+        let values = [10, 5, 12, 10];
+        smallMatrix.setValuesFromArray(values);
+
+        let matrixWithBias = smallMatrix.addBias();
+
+        for(let i = 0; i < values.length; i++){
+            expect(matrixWithBias.get(i, 0)).to.be.equal(values[i]);
+        }
+        expect(matrixWithBias.get(4, 0)).to.be.equal(1);
+    });
+
     it('Randomize', function(){
         matrix.randomize();
         matrix.foreach((value) => {

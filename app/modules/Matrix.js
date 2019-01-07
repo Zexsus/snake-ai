@@ -33,7 +33,6 @@ class Matrix{
     }
 
     /**
-     * Function is overloaded to create simpler notations. value is optional if vectorOrY is typeof Vector2D
      * @param {Vector2D} vector
      * @param {number} value
      * @returns {number}
@@ -163,6 +162,37 @@ class Matrix{
          });
 
          return newMatrix;
+    }
+
+    /**
+     * @param {Array} array
+     */
+    setValuesFromArray(array){
+        this.setForeach((number, matrix, position)=>{
+            return array[position.x + (position.y * this.size.x)];
+        });
+    }
+
+    addBias(){
+        let matrixWithBias = new Matrix(new Vector2D(this.size.x + 1, 1));
+        for(let i = 0; i<=this.size.x; i++){
+            matrixWithBias.set(new Vector2D(i, 0), this.get(i, 0));
+        }
+        matrixWithBias.set(new Vector2D(this.size.x, 0), 1);
+
+        return matrixWithBias;
+    }
+
+    /**
+     * @return {Array<number>}
+     */
+    toArray(){
+        let array = [];
+        this.foreach((value) => {
+            array.push(value);
+        });
+
+        return array;
     }
 
     /**

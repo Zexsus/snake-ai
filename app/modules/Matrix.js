@@ -28,7 +28,7 @@ class Matrix{
         if(y !== undefined){
             return this.matrix[y][vectorOrX]
         }else{
-            return this.matrix[vector.y][vector.x];
+            return this.matrix[vectorOrX.y][vectorOrX.x];
         }
     }
 
@@ -173,7 +173,9 @@ class Matrix{
         });
     }
 
-    addBias(){
+    // adding bias for single row matrix
+    // @TODO handle multiple rows matrix if needed
+    getWithBias(){
         let matrixWithBias = new Matrix(new Vector2D(this.size.x + 1, 1));
         for(let i = 0; i<=this.size.x; i++){
             matrixWithBias.set(new Vector2D(i, 0), this.get(i, 0));
@@ -181,6 +183,104 @@ class Matrix{
         matrixWithBias.set(new Vector2D(this.size.x, 0), 1);
 
         return matrixWithBias;
+    }
+
+    /**
+     * @returns {Matrix}
+     */
+    getActivated(){
+        let activatedMatrix = new Matrix(this.size);
+        this.foreach((number, matrix, position) => {
+           activatedMatrix.set(position, Matrix.sigmoid(number));
+        });
+
+        return activatedMatrix;
+    }
+
+    /**
+     * Sigmoid function to cleaner notation.
+     * @TODO move it to some "Calculations" class
+     * @param {number} x
+     * @returns {number}
+     */
+    static sigmoid(x){
+        return 1 / (1 + Math.exp(-x));
+    }
+
+    /**
+     * @returns {Matrix}
+     */
+    getSigmoidDerived(){
+        let sigmoidDerivedMatrix = new Matrix(this.size);
+        this.foreach((number, matrix, position) => {
+            let sigmoid = Matrix.sigmoid(number);
+            sigmoidDerivedMatrix.set(position, sigmoid * (1 - sigmoid))
+        });
+        return sigmoidDerivedMatrix;
+    }
+
+    getWithoutLastRow(){
+        let matrixWithoutLastRow = new Matrix(new Vector2D(this.size.x, this.size.y - 1));
+        this.foreach((number, matrix, position) => {
+            if(position.y < this.size.y - 1){
+                matrixWithoutLastRow.set(position, number);
+            }
+        });
+        return matrixWithoutLastRow;
+    }
+
+    /**
+     * @param {number} mutationRate
+     */
+    mutate(mutationRate) {
+        this.setForeach((number) => {
+            let rand = Math.random();
+            let newValue = number;
+            if (rand < mutationRate) {
+                newValue += Matrix.gaussianRand() / 5;
+
+                if (newValue > 1) newValue = 1;
+                if (newValue < -1) newValue = -1;
+            }
+            return newValue;
+        });
+    }
+
+    static gaussianRand() {
+        var rand = 0;
+
+        for (var i = 0; i < 6; i += 1) {
+            rand += Math.random();
+        }
+
+        return rand / 6;
+    }
+
+    /**
+     * @param {Matrix} otherMatrix
+     */
+    crossover(otherMatrix){
+        let child = new Matrix(this.size);
+        let randColumn = Math.floor(Math.random() * this.size.x);
+        let randRow = Math.floor(Math.random() * this.size.y);
+
+        this.foreach((thisNumber, thisMatrix, thisPosition) => {
+            if((thisPosition.y < randRow) || (thisPosition.y === randRow && thisPosition.x <= randColumn)){
+                child.set(thisPosition, thisNumber);
+            }else{
+                child.set(thisPosition, otherMatrix.get(thisPosition));
+            }
+        });
+
+        return child;
+    }
+
+    clone(){
+        let clone = new Matrix(this.size);
+        this.foreach((value, matrix, position) => {
+           clone.set(position, value);
+        });
+        return clone;
     }
 
     /**

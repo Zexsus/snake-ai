@@ -63,7 +63,7 @@ class Game {
         let gridSize = new Vector2D(32, 32);
         this.grid = new Grid(this.engine, new Vector2D(0, 0), gridSize);
         this.grid.setupWalls().clear();
-        this.engine.centeralize(this.grid, this.engine.canvas);
+        this.engine.centeralizeToCanvas(this.grid);
         this.grid.draw();
     }
 

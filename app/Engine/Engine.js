@@ -54,22 +54,23 @@ class Engine {
 
     /**
      * @param {GameObject} object
-     * @param {GameObject | HTMLCanvasElement} toObject
+     * @param {GameObject} toObject
      */
     centeralize(object, toObject) {
-        // TODO split it to two different funciions
-        let position  = new Vector2D(0, 0);
-        if (object instanceof GameObject && !(toObject instanceof GameObject)) {
-            let x = ((toObject.width) - object.getDisplaySize().x) / 2;
-            let y = ((toObject.height) - object.getDisplaySize().y) / 2;
-            position = new Vector2D(x, y);
-        } else {
-            let x = ((toObject.getDisplaySize().x) - object.getDisplaySize().x) / 2;
-            let y = ((toObject.getDisplaySize().y) - object.getDisplaySize().y) / 2;
-            position = new Vector2D(x, y);
-        }
+        let x = ((toObject.getDisplaySize().x) - object.getDisplaySize().x) / 2;
+        let y = ((toObject.getDisplaySize().y) - object.getDisplaySize().y) / 2;
+        let position = new Vector2D(x, y);
         object.setPosition(position);
+    }
 
+    /**
+     * @param {GameObject} object
+     */
+    centeralizeToCanvas(object) {
+        let x = ((this.canvas.width) - object.getDisplaySize().x) / 2;
+        let y = ((this.canvas.height) - object.getDisplaySize().y) / 2;
+        let position = new Vector2D(x, y);
+        object.setPosition(position);
     }
 }
 

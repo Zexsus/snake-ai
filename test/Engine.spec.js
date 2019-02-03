@@ -28,7 +28,7 @@ describe("Engine", function () {
     it('Centeralize GameObjects to canvas', function () {
         let rectangle1 = new Rectangle(engine, new Vector2D(0, 0), new Vector2D(100, 300), engine.getState('default'));
 
-        engine.centeralize(rectangle1, engine.canvas);
+        engine.centeralizeToCanvas(rectangle1);
         expect(rectangle1.position).to.be.eql({
             x: 150,
             y: 50

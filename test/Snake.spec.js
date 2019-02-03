@@ -1,6 +1,6 @@
 var expect = require("chai").expect;
-const Snake = require('../app/modules/Snake.js');
-const directions = require('../app/modules/Directions.js');
+const Snake = require('../app/Snake/Snake.js');
+const directions = require('../app/Game/Directions.js');
 
 describe('Snake', function(){
     let snake = null;

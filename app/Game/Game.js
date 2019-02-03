@@ -1,11 +1,11 @@
-const GameObjectState = require("../engine/GameObjectState.js");
-const Engine = require("../engine/Engine.js");
-const Grid = require("../gameObjects/Grid.js");
-const Vector2D = require("../engine/Vector2D.js");
+const GameObjectState = require("../Engine/GameObjectState.js");
+const Engine = require("../Engine/Engine.js");
+const Grid = require("./GameObjects/Grid.js");
+const Vector2D = require("../Engine/Vector2D.js");
 const config = require('./game-config.json');
 const directions = require('./Directions.js');
-const Snake = require('./Snake.js');
-const GridSnakeInterface = require('./GridSnakeInterface.js');
+const Snake = require('../Snake/Snake.js');
+const GridSnakeInterface = require('../Snake/GridSnakeInterface.js');
 
 
 class Game {

@@ -1,13 +1,12 @@
 var expect = require("chai").expect;
 let engine = require('./mock/mock-engine.js');
-const Rectangle = require('../app/gameObjects/Rectangle.js');
-const Vector2D = require('../app/engine/Vector2D.js');
+const Rectangle = require('../app/Game/GameObjects/Rectangle.js');
+const Vector2D = require('../app/Engine/Vector2D.js');
 
 describe("Engine", function () {
     it('Create canvas with properties', function () {
         let canvas = engine.canvas;
 
-        expect(canvas).to.exist;
         expect(canvas.width).to.be.equal(400);
         expect(canvas.height).to.be.equal(400);
         expect(canvas.style.margin).to.be.equal('10px');

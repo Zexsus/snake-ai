@@ -1,7 +1,7 @@
 var jsdom = require('jsdom');
 const {JSDOM} = jsdom;
-const GameObjectState = require('../../app/engine/GameObjectState.js');
-const Engine = require('../../app/engine/Engine.js');
+const GameObjectState = require('../../app/Engine/GameObjectState.js');
+const Engine = require('../../app/Engine/Engine.js');
 
 
 let dom = new JSDOM(`<!DOCTYPE html>`);

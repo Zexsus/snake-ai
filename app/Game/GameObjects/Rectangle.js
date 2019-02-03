@@ -1,5 +1,5 @@
 const GameObject = require("./GameObject.js");
-const Vector2D = require('../engine/Vector2D.js');
+const Vector2D = require('../../Engine/Vector2D.js');
 
 class Rectangle extends GameObject {
 

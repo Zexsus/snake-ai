@@ -1,7 +1,7 @@
 var expect = require("chai").expect;
-var directions = require('../app/modules/Directions');
+var directions = require('../app/Game/Directions');
 
-var BodyPart = require('../app/modules/BodyPart');
+var BodyPart = require('../app/Snake/BodyPart');
 
 describe('BodyPart', function () {
 
@@ -91,7 +91,7 @@ describe('BodyPart', function () {
         });
 
         it('Has the same position after recreate', function(){
-            var bodyPart3 = head.recreate();
+            head.recreate();
             expect(bodyPart2.next.position).to.be.eql(head.position);
         })
     });

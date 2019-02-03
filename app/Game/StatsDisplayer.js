@@ -1,8 +1,8 @@
 class StatsDisplayer{
 
     /**
-     *
      * @param {GameStatistics} gameStatistics
+     * @param {Document} document
      */
     constructor(gameStatistics, document){
         this.gameStats = gameStatistics;
@@ -26,7 +26,7 @@ class StatsDisplayer{
     }
 
     /**
-     * @param {string} item
+     * @param {string} id
      */
     clear(id){
         let item = this.document.getElementById(id);

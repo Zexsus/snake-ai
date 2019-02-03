@@ -1,5 +1,5 @@
 const Loop = require('./Loop.js');
-const GameObject = require('../gameObjects/GameObject.js');
+const GameObject = require('../Game/GameObjects/GameObject.js');
 const Vector2D = require('./Vector2D.js');
 
 class Engine {
@@ -57,6 +57,7 @@ class Engine {
      * @param {GameObject | HTMLCanvasElement} toObject
      */
     centeralize(object, toObject) {
+        // TODO split it to two different funciions
         let position  = new Vector2D(0, 0);
         if (object instanceof GameObject && !(toObject instanceof GameObject)) {
             let x = ((toObject.width) - object.getDisplaySize().x) / 2;

@@ -29,4 +29,9 @@ describe('Snake', function(){
            expect(fullBody.length).to.be.equal(4);
         });
     })
+
+    it('Clones', () => {
+        let clone = snake.clone();
+        expect(snake.brain).to.be.eql(clone.brain);
+    });
 });

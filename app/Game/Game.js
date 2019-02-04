@@ -3,9 +3,9 @@ const Engine = require("../Engine/Engine.js");
 const Grid = require("./GameObjects/Grid.js");
 const Vector2D = require("../Engine/Vector2D.js");
 const config = require('./game-config.json');
-const directions = require('./Directions.js');
-const Snake = require('../Snake/Snake.js');
 const GridSnakeInterface = require('../Snake/GridSnakeInterface.js');
+const Population = require('../Brain/Population.js');
+const GameStatistics = require('./GameStatistics.js');
 
 
 class Game {
@@ -16,12 +16,12 @@ class Game {
     constructor(document){
        this.isRunning = false;
        this.document = document;
-
+        this.gameStats = new GameStatistics(this);
         /**
          * @type {GridItem}
          */
        this.foodItem = null;
-
+        this.movesWithoutGrow = 0;
        if(!this.gameAwaken) this.awake();
        this.start();
     }
@@ -39,7 +39,7 @@ class Game {
     setupEngine(){
         this.engine = new Engine({
             document: this.document,
-            fps: 30,
+            fps: 60,
             states: [
                 new GameObjectState('default', '#a4f2ff'),
                 new GameObjectState('wall', '#003b62'),
@@ -60,7 +60,7 @@ class Game {
     }
 
     setupGrid(){
-        let gridSize = new Vector2D(32, 32);
+        let gridSize = new Vector2D(33, 33);
         this.grid = new Grid(this.engine, new Vector2D(0, 0), gridSize);
         this.grid.setupWalls().clear();
         this.engine.centeralizeToCanvas(this.grid);
@@ -68,54 +68,45 @@ class Game {
     }
 
     start(){
-        this.snake = this.initSnake();
+        this.initPopulation();
         this.isRunning = true;
         this.counter = 0;
-
         this.engine.update(() => {
             if(this.isRunning)
                 this.update();
         });
+    }
 
+    getSnake() {
+        return this.population.actualSnake;
     }
 
     /**
-     * @returns {Snake}
+     * @returns {Population}
      */
-    initSnake(){
-        let snake = new Snake();
-        snake.head.setPosition(new Vector2D(10, 10));
-        snake.grow().grow().grow().grow().grow().grow().grow()
-            .grow().grow().grow().grow()
-            .grow().grow().grow().grow()
-            .grow().grow().grow().grow()
-            .grow().grow().grow().grow()
-            .grow().grow().grow().grow()
-            .grow().grow().grow().grow()
-            .grow().grow().grow().grow()
-            .grow().grow().grow().grow().grow().grow().grow().grow();
-        snake.setDirection(directions.right);
-
-        return snake;
+    initPopulation() {
+        this.population = new Population(10);
     }
 
-    over(){
+    snakeDie() {
+        this.getSnake().die();
+        this.population.getNextSnake();
         this.isRunning = false;
-        this.restart();
+        this.restartGame();
     }
 
-    restart(){
-        this.snake = this.initSnake();
+    restartGame() {
         this.grid.resetStatesWithout(['wall']);
         this.generateFood();
         this.grid.clear();
         this.grid.draw();
+        this.movesWithoutGrow = 0;
         this.isRunning = true;
     }
 
     update(){
-        if(this.counter >= this.engine.loop.fps / 3){
-            this.updatePerFrame(this.snake);
+        if (this.counter >= this.engine.loop.fps / 40) {
+            this.updatePerFrame();
             this.counter = 0;
         }
         this.counter++;
@@ -128,8 +119,14 @@ class Game {
     }
 
     handleMotion(){
-        this.snake.move();
-        this.handleCollisions(this.snake, this.grid, this.engine);
+        let input = this.gameStats.getStatisticsArray();
+        this.getSnake().decideDirection(input);
+        this.getSnake().move();
+        this.handleCollisions(this.getSnake(), this.grid, this.engine);
+        this.movesWithoutGrow += 1;
+        if (this.movesWithoutGrow > 100) {
+            this.snakeDie();
+        }
     }
 
     resetScene(){
@@ -138,7 +135,7 @@ class Game {
     }
 
     drawScene(){
-        let snakeBodyArrayForGrid = this.getSnakeForGrid(this.snake);
+        let snakeBodyArrayForGrid = this.getSnakeForGrid(this.getSnake());
         this.grid.setMultipleItemsState(snakeBodyArrayForGrid.reverse());
         this.grid.draw();
     }
@@ -166,7 +163,7 @@ class Game {
     }
 
     handleCollisions(){
-        let vector = new Vector2D(this.snake.head.position.x, this.snake.head.position.y);
+        let vector = new Vector2D(this.getSnake().head.position.x, this.getSnake().head.position.y);
         let item = this.grid.getItem(vector);
 
         if(item.hasState('wall')){
@@ -183,19 +180,18 @@ class Game {
     }
 
     onBodyCollision(){
-        this.over();
+        this.snakeDie();
     }
 
     onWallCollision(){
-        this.over();
+        this.snakeDie();
     }
 
     onFoodCollision(){
-        this.snake.grow();
+        this.getSnake().grow();
         this.generateFood();
+        this.movesWithoutGrow = 0;
     }
 }
-
-
 
 module.exports = Game;

@@ -70,23 +70,20 @@ class Matrix{
     }
 
     /**
-     * @param {Matrix} n
+     * @param {Matrix} inputs
      * @returns {Matrix}
      */
-    dot(n){
-        let result = new Matrix(new Vector2D(this.rows, n.cols));
+    getDotsMatrix(inputs, bias) {
+        let result = new Matrix(new Vector2D(this.size.x, 1));
+        result.setForeach((resultValue, resultItem, resultPosition) => {
+            let sum = 0;
+            inputs.foreach((inputValue, inputItem, inputPosition) => {
+                // console.log('get', resultPosition.x, inputPosition.x);
+                sum += inputValue * this.get(resultPosition.x, inputPosition.x);
+            });
+            return sum + bias;
 
-        if(this.cols === n.rows){
-            for(let i = 0; i < this.rows; i++){
-                for(let j = 0; j < n.cols; j++){
-                    let sum = 0;
-                    for(let k = 0; k < this.cols; k++){
-                        sum += this.matrix[i][k] * n.matrix[k][j];
-                    }
-                    result.matrix[i][j] = sum;
-                }
-            }
-        }
+        });
         return result;
     }
 
@@ -173,18 +170,6 @@ class Matrix{
         });
     }
 
-    // adding bias for single row matrix
-    // @TODO handle multiple rows matrix if needed
-    getWithBias(){
-        let matrixWithBias = new Matrix(new Vector2D(this.size.x + 1, 1));
-        for(let i = 0; i<=this.size.x; i++){
-            matrixWithBias.set(new Vector2D(i, 0), this.get(i, 0));
-        }
-        matrixWithBias.set(new Vector2D(this.size.x, 0), 1);
-
-        return matrixWithBias;
-    }
-
     /**
      * @returns {Matrix}
      */
@@ -237,8 +222,9 @@ class Matrix{
             let rand = Math.random();
             let newValue = number;
             if (rand < mutationRate) {
-                newValue += Matrix.gaussianRand() / 5;
-
+                let mutation = Matrix.gaussianRand() / 10;
+                newValue += mutation;
+                // console.log(mutation);
                 if (newValue > 1) newValue = 1;
                 if (newValue < -1) newValue = -1;
             }
@@ -299,11 +285,11 @@ class Matrix{
      * @param {Array<number>}array
      * @returns {Matrix}
      */
-    static getSingleColumnMatrixFromArray(array){
-        let matrix = new Matrix(new Vector2D(1, array.length));
+    static getSingleRowMatrixFromArray(array) {
+        let matrix = new Matrix(new Vector2D(array.length, 1));
 
         array.forEach((value, index) => {
-           matrix.matrix[index][0] = value;
+            matrix.matrix[0][index] = value;
         });
 
         return matrix;

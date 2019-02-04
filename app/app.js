@@ -22,16 +22,16 @@ function initUserInput(game){
         e = e || window.event;
         if (e.keyCode === 38) {
             // up arrow
-            game.snake.setDirection(directions.up);
+            game.getSnake().setDirection(directions.up);
         } else if (e.keyCode === 40) {
             // down arrow
-            game.snake.setDirection(directions.down);
+            game.getSnake().setDirection(directions.down);
         } else if (e.keyCode === 37) {
             // left arrow
-            game.snake.setDirection(directions.left);
+            game.getSnake().setDirection(directions.left);
         } else if (e.keyCode === 39) {
             // right arrow
-            game.snake.setDirection(directions.right);
+            game.getSnake().setDirection(directions.right);
         }
     }
 }

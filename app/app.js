@@ -8,10 +8,6 @@ let gameStats = new GameStatistics(game);
 let statsDisplayer = new StatsDisplayer(gameStats, document);
 initUserInput(game);
 
-game.engine.update(function(){
-    statsDisplayer.display();
-    // console.log(gameStats.getStatistics());
-});
 
 /**
  *

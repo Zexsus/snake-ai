@@ -170,11 +170,11 @@ class Matrix{
      * @param {Array<number>}array
      * @returns {Matrix}
      */
-    static getSingleRowMatrixFromArray(array) {
-        let matrix = new Matrix(new Vector2D(array.length, 1));
+    static getSingleColumnMatrixFromArray(array) {
+        let matrix = new Matrix(new Vector2D(1, array.length));
 
         array.forEach((value, index) => {
-            matrix.matrix[0][index] = value;
+            matrix.matrix[index][0] = value;
         });
 
         return matrix;

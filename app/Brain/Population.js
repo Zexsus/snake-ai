@@ -40,13 +40,6 @@ class Population {
         let fitnessSum = 0;
         this.snakes.forEach((snake, index) => {
             snake.calcFitness();
-            console.clear();
-            console.log({
-                'snake': index,
-                'bodySize': snake.bodySize,
-                'moves': snake.moves,
-                'fitness': snake.fitness
-            });
             fitnessSum += snake.fitness;
         });
         this.naturalSelection(fitnessSum);
@@ -86,6 +79,7 @@ class Population {
         });
         this.bestFitness = max;
         this.bestSnake = bestSnake;
+        // this.bestSnake.consoleBrain();
     }
 
     /**

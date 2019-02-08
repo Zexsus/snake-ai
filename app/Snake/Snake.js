@@ -10,7 +10,7 @@ class Snake {
         this.moves = 0;
         this.directionChanges = 0;
         this.alive = true;
-        this.brain = new NeuralNet(12, 16, 4);
+        this.brain = new NeuralNet(4, 6, 4);
     }
 
     setDefaults(){
@@ -25,12 +25,6 @@ class Snake {
         if(this.head.position === null) throw "There is no head position";
         this.head.move(this.direction);
         this.moves += 1;
-        return this;
-    }
-
-    moveToDirection(direction){
-        this.setDirection(direction);
-        this.move();
         return this;
     }
 
@@ -65,13 +59,7 @@ class Snake {
         return this;
     }
 
-    reset(){
-        delete this.head;
-        this.setDefaults();
-    }
-
     die() {
-        // console.log(this.brain.getDifferencesAverage(this.moves));
         this.alive = false;
     }
 
@@ -93,7 +81,7 @@ class Snake {
     }
 
     calcFitness() {
-        this.fitness = this.directionChanges + this.moves + (this.bodySize - 2) ** 2;
+        this.fitness = (this.moves - 10) + (this.bodySize - 2) ** 3;
     }
 
     clone() {
@@ -114,25 +102,18 @@ class Snake {
 
     decideDirection(input) {
         let brainOutput = this.brain.output(input);
-        brainOutput = brainOutput.matrix[0];
         let maxValue = 0;
         let chosenDirection = null;
-        brainOutput.forEach((value) => {
+        brainOutput.foreach((value) => {
             if (maxValue < value) {
                 maxValue = value;
             }
         });
 
-        brainOutput.forEach((value, index) => {
+        brainOutput.foreach((value, item, position) => {
             if (maxValue === value) {
-                chosenDirection = this.getDirectionByIndex(index);
+                chosenDirection = this.getDirectionByIndex(position.y);
                 this.setDirection(chosenDirection);
-                // console.log(
-                //     // 'Snake decide',
-                //     // index,
-                //     // input,
-                //     brainOutput
-                // );
             }
         });
     }

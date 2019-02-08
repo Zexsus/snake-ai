@@ -16,6 +16,7 @@ class NeuralNet {
         // Create weights with bias
         this.weights = {
             hiddenToInput: new Matrix(new Vector2D(this.size.hidden, this.size.inputs)),
+            hiddenToHidden: new Matrix(new Vector2D(this.size.hidden, this.size.hidden)),
             outputToHidden: new Matrix(new Vector2D(this.size.output, this.size.hidden)),
         };
 
@@ -43,17 +44,20 @@ class NeuralNet {
 
     /**
      * @param {Array<Number>} inputsArray
-     * @returns {Array<number>}
+     * @returns {Matrix}
      */
     output(inputsArray) {
         //convert array to matrix
-        let inputsNeurons = Matrix.getSingleRowMatrixFromArray(inputsArray);
+        let inputsNeurons = Matrix.getSingleColumnMatrixFromArray(inputsArray);
+
         let hiddenNeurons = this.weights.hiddenToInput.getDotsMatrix(inputsNeurons, this.bias);
         let hiddenNeuronsActivated = hiddenNeurons.getActivated();
-        let outputNeurons = this.weights.outputToHidden.getDotsMatrix(hiddenNeuronsActivated, this.bias);
 
+        let secHiddenNeurons = this.weights.hiddenToHidden.getDotsMatrix(hiddenNeuronsActivated, this.bias);
+        let secHiddenNeuronsActivated = secHiddenNeurons.getActivated();
+
+        let outputNeurons = this.weights.outputToHidden.getDotsMatrix(secHiddenNeuronsActivated, this.bias);
         return outputNeurons.getActivated();
-        ;
     }
 
     /**
@@ -72,6 +76,7 @@ class NeuralNet {
     crossover(partner) {
         let child = new NeuralNet(this.size.inputs, this.size.hidden, this.size.output);
         child.weights.hiddenToInput = this.weights.hiddenToInput.crossover(partner.weights.hiddenToInput);
+        child.weights.hiddenToHidden = this.weights.hiddenToHidden.crossover(partner.weights.hiddenToHidden);
         child.weights.outputToHidden = this.weights.outputToHidden.crossover(partner.weights.outputToHidden);
         return child;
     }

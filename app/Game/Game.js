@@ -36,7 +36,7 @@ class Game {
     setupEngine(){
         this.engine = new Engine({
             document: this.document,
-            fps: 5,
+            fps: 60,
             states: [
                 new GameObjectState('default', '#a4f2ff'),
                 new GameObjectState('wall', '#003b62'),
@@ -111,7 +111,7 @@ class Game {
         this.getSnake().move();
         this.handleCollisions(this.getSnake(), this.grid, this.engine);
         this.movesWithoutGrow += 1;
-        if (this.movesWithoutGrow > 100) {
+        if (this.movesWithoutGrow > 300) {
             this.snakeDie();
         }
 

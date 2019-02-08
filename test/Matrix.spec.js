@@ -52,11 +52,13 @@ describe("Matrix", function () {
     it('Returns single column matrix from array', function(){
         let arrayValues = [10, 15, 25, 30, 12];
 
-        singleColumnMatrix = Matrix.getSingleRowMatrixFromArray(arrayValues);
+        singleColumnMatrix = Matrix.getSingleColumnMatrixFromArray(arrayValues);
 
-        expect(singleColumnMatrix.size.y).to.be.equal(1);
-        expect(singleColumnMatrix.size.x).to.be.equal(5);
-        expect(singleColumnMatrix.matrix[0][0]).to.be.equal(10);
+        expect(singleColumnMatrix.size.y).to.be.equal(5);
+        expect(singleColumnMatrix.size.x).to.be.equal(1);
+        singleColumnMatrix.foreach((value, item, position) => {
+            expect(value).to.be.equal(arrayValues[position.y]);
+        });
     });
 
     it('Calculates sigmoid of matrix | Activate matrix', function(){

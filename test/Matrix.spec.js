@@ -24,104 +24,29 @@ describe("Matrix", function () {
         expect(matrix.get(0, 0)).to.be.equal(5);
     });
 
-    describe('Calculates', function(){
-        beforeEach(function(){
-            matrix.set(new Vector2D(0, 0), 5);
-            matrix.set(new Vector2D(1, 0), 15);
-            matrix.set(new Vector2D(2, 2), 25);
-        });
-
-        it('Multiplies', function(){
-            matrix.multiply(2);
-
-            expect(matrix.get(0, 0)).to.be.equal(10);
-            expect(matrix.get(1, 0)).to.be.equal(30);
-            expect(matrix.get(2, 2)).to.be.equal(50);
-        });
-
-        it('Add value', function() {
-            matrix.add(5);
-
-            expect(matrix.get(0, 0)).to.be.equal(10);
-            expect(matrix.get(1, 0)).to.be.equal(20);
-            expect(matrix.get(2, 2)).to.be.equal(30);
-        });
-
-        it('Subtract value', function() {
-            matrix.subtract(5);
-
-            expect(matrix.get(0, 0)).to.be.equal(0);
-            expect(matrix.get(1, 0)).to.be.equal(10);
-            expect(matrix.get(2, 2)).to.be.equal(20);
-        });
-
-        it('Transposing', function(){
-            transposed = matrix.transpose();
-
-            expect(transposed.get(0, 0)).to.be.equal(5);
-            expect(transposed.get(0, 1)).to.be.equal(15);
-            expect(transposed.get(1, 0)).to.be.equal(null);
-        });
-
-        describe('By other matrix', function(){
-            beforeEach(function(){
-                matrix2 = new Matrix(standardMatrixSize);
-            });
-
-            it('Multiplies', function(){
-                matrix2.set(new Vector2D(0, 0), 2);
-                matrix2.set(new Vector2D(1, 0), 3);
-                matrix2.set(new Vector2D(2, 2), 2.5);
-
-                let result = matrix.multiplyBy(matrix2);
-
-                expect(result.get(0, 0)).to.be.equal(10);
-                expect(result.get(1, 0)).to.be.equal(45);
-                expect(result.get(2, 2)).to.be.equal(62.5);
-            });
-
-            it('Add', function(){
-                matrix2.set(new Vector2D(0, 0), 2);
-                matrix2.set(new Vector2D(1, 0), 3);
-                matrix2.set(new Vector2D(2, 2), -20);
-
-                let result = matrix.addBy(matrix2);
-
-                expect(result.get(0, 0)).to.be.equal(7);
-                expect(result.get(1, 0)).to.be.equal(18);
-                expect(result.get(2, 2)).to.be.equal(5);
-            });
-
-            it('Subtract', function(){
-                matrix2.set(new Vector2D(0, 0), 2);
-                matrix2.set(new Vector2D(1, 0), 3);
-                matrix2.set(new Vector2D(2, 2), -20);
-
-                let result = matrix.subtractBy(matrix2);
-
-                expect(result.get(0, 0)).to.be.equal(3);
-                expect(result.get(1, 0)).to.be.equal(12);
-                expect(result.get(2, 2)).to.be.equal(45);
-            });
-        });
-    });
-
     // TODO write method to test dots matrix
     it('Returns dots matrix', function () {
-        // let matrix2 = new Matrix(standardMatrixSize);
-        //
-        // matrix.setForeach(()=>{
-        //     return 4;
-        // });
-        //
-        // matrix2.setForeach(()=>{
-        //     return 2;
-        // });
-        // matrix2.matrix[4][4] = 10;
-        // let result = matrix.getDotsMatrix(matrix2);
-        //
-        // expect(result.get(0, 0)).to.be.equal(4 * 2 * 10);
-        // expect(result.get(4, 0)).to.be.equal(4 * 2 * 9 + 4 * 10);
+        let matrix1 = new Matrix(new Vector2D(6, 4));
+        let inputs = new Matrix(new Vector2D(1, 4));
+
+        matrix1.setValuesFromArray([
+            1, 2, 3, 4, 5, 6,
+            1, 2, 3, 4, 5, 6,
+            1, 2, 3, 4, 5, 6,
+            1, 2, 3, 4, 5, 6,
+        ]);
+        inputs.setValuesFromArray([
+            2,
+            2,
+            2,
+            2
+        ]);
+
+        let expectedDots = [8, 16, 24, 32, 40, 48];
+        let dots = matrix1.getDotsMatrix(inputs, 0);
+        dots.foreach((value, item, position) => {
+            expect(value).to.be.equal(expectedDots[position.y]);
+        });
     });
 
     it('Returns single column matrix from array', function(){
@@ -132,31 +57,6 @@ describe("Matrix", function () {
         expect(singleColumnMatrix.size.y).to.be.equal(1);
         expect(singleColumnMatrix.size.x).to.be.equal(5);
         expect(singleColumnMatrix.matrix[0][0]).to.be.equal(10);
-    });
-
-    it('Gets values from array', function(){
-        let smallMatrix = new Matrix(new Vector2D(4, 4));
-        let values = [  10, 5, 12, 10,
-                        4, 13, 12, 11,
-                        14, 12, 44, 121,
-                        1, 111, 22, 344];
-        smallMatrix.setValuesFromArray(values);
-        expect(smallMatrix.get(0, 0)).to.be.equal(10);
-        expect(smallMatrix.get(3, 1)).to.be.equal(11);
-        smallMatrix.foreach((number, matrix, position) => {
-            expect(number).to.be.equal(values[position.x + (position.y * smallMatrix.size.x)]);
-        })
-    });
-
-    it('Returns self as array', function(){
-        let smallMatrix = new Matrix(new Vector2D(4, 4));
-        let values = [  10, 5, 12, 10,
-                        4, 13, 12, 11,
-                        14, 12, 44, 121,
-                        1, 111, 22, 344];
-
-        smallMatrix.setValuesFromArray(values);
-        expect(smallMatrix.toArray()).to.be.eql(values);
     });
 
     it('Calculates sigmoid of matrix | Activate matrix', function(){
@@ -171,20 +71,6 @@ describe("Matrix", function () {
         activatedMatrix.foreach((number) => (
             expect(number).to.be.within(0, 1)
         ));
-    });
-
-    it('Returns matrix without last row', function(){
-        let smallMatrix = new Matrix(new Vector2D(4, 4));
-        let values = [  10, 5, 12, 10,
-                        4, 13, 12, 11,
-                        14, 12, 44, 121,
-                        1, 111, 22, 344];
-
-        smallMatrix.setValuesFromArray(values);
-
-        let matrixWithoutLastRow = smallMatrix.getWithoutLastRow();
-        expect(matrixWithoutLastRow.size.y).to.be.equal(smallMatrix.size.y - 1);
-        expect(matrixWithoutLastRow.matrix.length).to.be.equal(smallMatrix.size.y - 1);
     });
 
     it('Mutate', function(){

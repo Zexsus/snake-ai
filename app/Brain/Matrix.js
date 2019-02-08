@@ -48,14 +48,17 @@ class Matrix{
      * @returns {Matrix}
      */
     getDotsMatrix(inputs, bias) {
-        let result = new Matrix(new Vector2D(this.size.x, 1));
+        let result = new Matrix(new Vector2D(1, this.size.x));
         result.setForeach((resultValue, resultItem, resultPosition) => {
             let sum = 0;
-            inputs.foreach((inputValue, inputItem, inputPosition) => {
-                sum += inputValue * this.get(resultPosition.x, inputPosition.x);
+            this.foreach((thisValue, thisItem, thisPosition) => {
+                inputs.foreach((inputValue, inputItem, inputPosition) => {
+                    if (thisPosition.x === resultPosition.y && thisPosition.y === inputPosition.y) {
+                        sum += inputValue * thisValue;
+                    }
+                });
             });
             return sum + bias;
-
         });
         return result;
     }
@@ -67,13 +70,21 @@ class Matrix{
         return this;
     }
 
+    /**
+     * @param {Array} array
+     */
+    setValuesFromArray(array) {
+        this.setForeach((number, matrix, position) => {
+            return array[position.x + (position.y * this.size.x)];
+        });
+    }
 
     /**
      * @returns {Matrix}
      */
     getActivated(){
         let activatedMatrix = new Matrix(this.size);
-        this.foreach((number, matrix, position) => {
+        this.setForeach((number, matrix, position) => {
            activatedMatrix.set(position, Matrix.sigmoid(number));
         });
 
@@ -133,6 +144,26 @@ class Matrix{
         });
 
         return child;
+    }
+
+    clone() {
+        let clone = new Matrix(this.size);
+        this.foreach((value, matrix, position) => {
+            clone.set(position, value);
+        });
+        return clone;
+    }
+
+    /**
+     * @return {Array<number>}
+     */
+    toArray() {
+        let array = [];
+        this.foreach((value) => {
+            array.push(value);
+        });
+
+        return array;
     }
 
     /**

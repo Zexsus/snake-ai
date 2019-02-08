@@ -93,7 +93,7 @@ class Snake {
     }
 
     calcFitness() {
-        this.fitness = this.directionChanges + this.moves + (this.bodySize - 2) ** 4;
+        this.fitness = this.directionChanges + this.moves + (this.bodySize - 2) ** 2;
     }
 
     clone() {

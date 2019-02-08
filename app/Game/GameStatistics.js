@@ -27,10 +27,10 @@ class GameStatistics{
 
     getDistancesToWall(){
         return {
-            right: this.game.grid.size.x - this.game.getSnake().head.position.x - 1,
-            left: this.game.getSnake().head.position.x,
-            up: this.game.getSnake().head.position.y,
-            down: this.game.grid.size.y - this.game.getSnake().head.position.y - 1
+            right: this.game.grid.size.x - this.game.getSnake().head.position.x - 2,
+            left: this.game.getSnake().head.position.x - 1,
+            up: this.game.getSnake().head.position.y - 1,
+            down: this.game.grid.size.y - this.game.getSnake().head.position.y - 2
         };
     }
 

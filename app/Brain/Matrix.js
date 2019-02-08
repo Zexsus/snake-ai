@@ -71,6 +71,7 @@ class Matrix{
 
     /**
      * @param {Matrix} inputs
+     * @param {number} bias
      * @returns {Matrix}
      */
     getDotsMatrix(inputs, bias) {
@@ -78,7 +79,6 @@ class Matrix{
         result.setForeach((resultValue, resultItem, resultPosition) => {
             let sum = 0;
             inputs.foreach((inputValue, inputItem, inputPosition) => {
-                // console.log('get', resultPosition.x, inputPosition.x);
                 sum += inputValue * this.get(resultPosition.x, inputPosition.x);
             });
             return sum + bias;
@@ -222,9 +222,7 @@ class Matrix{
             let rand = Math.random();
             let newValue = number;
             if (rand < mutationRate) {
-                let mutation = Matrix.gaussianRand() / 10;
-                newValue += mutation;
-                // console.log(mutation);
+                newValue += Matrix.gaussianRand() / 5;
                 if (newValue > 1) newValue = 1;
                 if (newValue < -1) newValue = -1;
             }

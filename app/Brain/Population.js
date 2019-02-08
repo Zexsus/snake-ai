@@ -1,6 +1,5 @@
 const Snake = require("../Snake/Snake.js");
 const Vector2D = require("../Engine/Vector2D.js");
-const directions = require('../Game/Directions.js');
 
 class Population {
     /**
@@ -9,7 +8,7 @@ class Population {
     constructor(size) {
         this.snakes = Population.getInitSnakes(size);
         this.size = size;
-        this.mutationRate = 0.2;
+        this.mutationRate = 0.1;
         this.generation = 1;
         this.setupSnakesStartState();
         this.actualSnakeIndex = 0;
@@ -21,7 +20,6 @@ class Population {
         this.snakes.forEach(snake => {
             snake.head.setPosition(new Vector2D(16, 16));
             snake.grow().grow().grow();
-            snake.setDirection(directions.right);
         });
     }
 

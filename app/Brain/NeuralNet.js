@@ -10,7 +10,7 @@ class NeuralNet {
     constructor(inputs, hidden, output) {
         this.size = {inputs, hidden, output};
         this.lastValues = null;
-        this.bias = 0.9;
+        this.bias = 0;
         this.differences = [];
 
         // Create weights with bias
@@ -43,7 +43,7 @@ class NeuralNet {
 
     /**
      * @param {Array<Number>} inputsArray
-     * @returns {Array<number>|Array|T[]}
+     * @returns {Array<number>}
      */
     output(inputsArray) {
         //convert array to matrix
@@ -51,10 +51,9 @@ class NeuralNet {
         let hiddenNeurons = this.weights.hiddenToInput.getDotsMatrix(inputsNeurons, this.bias);
         let hiddenNeuronsActivated = hiddenNeurons.getActivated();
         let outputNeurons = this.weights.outputToHidden.getDotsMatrix(hiddenNeuronsActivated, this.bias);
-        let outputNeuronsActivated = outputNeurons.getActivated();
-        // Proggression checking
 
-        return outputNeuronsActivated;
+        return outputNeurons.getActivated();
+        ;
     }
 
     /**

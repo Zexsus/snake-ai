@@ -43,33 +43,6 @@ class Matrix{
     }
 
     /**
-     * @param {number} scalar
-     */
-    multiply(scalar){
-        this.setForeach((value) => {
-            return value * scalar;
-        });
-        return this;
-    }
-
-    /**
-     * @param {Matrix} multiplier
-     * @return Matrix
-     */
-    multiplyBy(multiplier){
-        let newMatrix = new Matrix(this.size);
-        multiplier.foreach((number, multiplierMatix, position) => {
-            this.foreach((thisNumber, thisMultiplierMatix, thisPosition) => {
-                if(position.isEqual(thisPosition)){
-                    newMatrix.matrix[position.y][position.x] = number * thisNumber;
-                }
-            })
-        });
-
-        return newMatrix;
-    }
-
-    /**
      * @param {Matrix} inputs
      * @param {number} bias
      * @returns {Matrix}
@@ -94,81 +67,6 @@ class Matrix{
         return this;
     }
 
-    /**
-     * @param {number} number
-     */
-    add(number){
-        this.setForeach((value) => {
-            return value + number;
-        });
-        return this;
-    }
-
-    /**
-     * @param {Matrix} matrix
-     */
-    addBy(matrix){
-        let newMatrix = new Matrix(this.size);
-
-        matrix.foreach((number, multiplierMatix, position) => {
-            this.foreach((thisNumber, thisMultiplierMatix, thisPosition) => {
-                if(position.isEqual(thisPosition)){
-                    newMatrix.matrix[position.y][position.x] = number + thisNumber;
-                }
-            })
-        });
-
-        return newMatrix;
-    }
-
-    /**
-     * @param {number} number
-     */
-    subtract(number){
-        this.setForeach((value) => {
-            return value - number;
-        });
-        return this;
-    }
-
-    /**
-     * @param {Matrix} matrix
-     */
-    subtractBy(matrix){
-        let newMatrix = new Matrix(this.size);
-
-        matrix.foreach((number, multiplierMatix, position) => {
-            this.foreach((thisNumber, thisMultiplierMatix, thisPosition) => {
-                if(position.isEqual(thisPosition)){
-                    newMatrix.matrix[position.y][position.x] = thisNumber - number;
-                }
-            })
-        });
-
-        return newMatrix;
-    }
-
-    /**
-     * @returns {Matrix}
-     */
-    transpose(){
-         let newMatrix = new Matrix(this.size);
-
-         this.foreach((number, matrix, position) =>{
-             newMatrix.matrix[position.y][position.x] = matrix.matrix[position.x][position.y];
-         });
-
-         return newMatrix;
-    }
-
-    /**
-     * @param {Array} array
-     */
-    setValuesFromArray(array){
-        this.setForeach((number, matrix, position)=>{
-            return array[position.x + (position.y * this.size.x)];
-        });
-    }
 
     /**
      * @returns {Matrix}
@@ -190,28 +88,6 @@ class Matrix{
      */
     static sigmoid(x){
         return 1 / (1 + Math.exp(-x));
-    }
-
-    /**
-     * @returns {Matrix}
-     */
-    getSigmoidDerived(){
-        let sigmoidDerivedMatrix = new Matrix(this.size);
-        this.foreach((number, matrix, position) => {
-            let sigmoid = Matrix.sigmoid(number);
-            sigmoidDerivedMatrix.set(position, sigmoid * (1 - sigmoid))
-        });
-        return sigmoidDerivedMatrix;
-    }
-
-    getWithoutLastRow(){
-        let matrixWithoutLastRow = new Matrix(new Vector2D(this.size.x, this.size.y - 1));
-        this.foreach((number, matrix, position) => {
-            if(position.y < this.size.y - 1){
-                matrixWithoutLastRow.set(position, number);
-            }
-        });
-        return matrixWithoutLastRow;
     }
 
     /**
@@ -257,26 +133,6 @@ class Matrix{
         });
 
         return child;
-    }
-
-    clone(){
-        let clone = new Matrix(this.size);
-        this.foreach((value, matrix, position) => {
-           clone.set(position, value);
-        });
-        return clone;
-    }
-
-    /**
-     * @return {Array<number>}
-     */
-    toArray(){
-        let array = [];
-        this.foreach((value) => {
-            array.push(value);
-        });
-
-        return array;
     }
 
     /**

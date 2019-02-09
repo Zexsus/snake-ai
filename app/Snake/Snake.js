@@ -10,7 +10,20 @@ class Snake {
         this.moves = 0;
         this.directionChanges = 0;
         this.alive = true;
-        this.brain = new NeuralNet(4, 6, 4);
+        this.brain = new NeuralNet({
+            layers: [
+                {name: 'input', size: 12},
+                {name: 'hiddenFirst', size: 16},
+                {name: 'hiddenSecond', size: 16},
+                {name: 'output', size: 4},
+            ],
+            weights: [
+                {'from': 'hiddenFirst', to: 'input'},
+                {'from': 'hiddenFirst', to: 'hiddenSecond'},
+                {'from': 'output', to: 'hiddenSecond'},
+            ],
+            bias: 0,
+        });
     }
 
     setDefaults(){

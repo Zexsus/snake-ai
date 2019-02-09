@@ -3,41 +3,53 @@ const Vector2D = require('../Engine/Vector2D.js');
 
 class NeuralNet {
     /**
-     * @param {Number} inputs
-     * @param {Number} hidden
-     * @param {Number} output
+     * @param {Object} args
+     * @param {number} args.bias
+     * @param {Array<Object>} args.layers
+     * @param {Array<Object>} args.weights
      */
-    constructor(inputs, hidden, output) {
-        this.size = {inputs, hidden, output};
-        this.lastValues = null;
-        this.bias = 0;
-        this.differences = [];
-
-        // Create weights with bias
-        this.weights = {
-            hiddenToInput: new Matrix(new Vector2D(this.size.hidden, this.size.inputs)),
-            hiddenToHidden: new Matrix(new Vector2D(this.size.hidden, this.size.hidden)),
-            outputToHidden: new Matrix(new Vector2D(this.size.output, this.size.hidden)),
-        };
-
+    constructor(args) {
+        this.layers = args.layers;
+        this.bias = args.bias;
+        this.weights = args.weights;
+        this.setupWeightsMatrixes();
         this.randomizeWeights();
     }
 
+    getLayer(name) {
+        for (let index = 0; index < this.layers.length; index++) {
+            let layer = this.layers[index];
+            if (layer.name === name) return layer;
+        }
+    }
+
+    getLastLayer() {
+        return this.layers[this.layers.length - 1];
+    }
+
+    setupWeightsMatrixes() {
+        this.weights.forEach((item, index) => {
+            let layers = [this.getLayer(item['from']), this.getLayer(item['to'])];
+            let size = new Vector2D(layers[0].size, layers[1].size);
+            this.weights[index].matrix = new Matrix(size);
+        });
+    }
+
     randomizeWeights() {
-        this.forEachWeights((item) => {
-            item.randomize();
+        this.forEachWeights((matrix) => {
+            matrix.randomize();
         });
         return this;
     }
 
     /**
-     * @param {function(Matrix, String)} callback
+     * @param {function(Matrix, Object, String)} callback
      * @returns {NeuralNet}
      */
     forEachWeights(callback) {
-        for (let key in this.weights) {
-            let item = this.weights[key];
-            callback(item, key)
+        for (let index = 0; index < this.weights.length; index++) {
+            let weight = this.weights[index];
+            callback(weight.matrix, weight, index);
         }
         return this;
     }
@@ -47,17 +59,17 @@ class NeuralNet {
      * @returns {Matrix}
      */
     output(inputsArray) {
-        //convert array to matrix
         let inputsNeurons = Matrix.getSingleColumnMatrixFromArray(inputsArray);
+        this.layers[0].values = inputsNeurons;
 
-        let hiddenNeurons = this.weights.hiddenToInput.getDotsMatrix(inputsNeurons, this.bias);
-        let hiddenNeuronsActivated = hiddenNeurons.getActivated();
+        for (let i = 0; i < this.weights.length; i++) {
+            let weight = this.weights[i];
+            let layer = this.layers[i + 1];
+            layer.values = weight.matrix.getDotsMatrix(this.layers[i].values, this.bias);
+            layer.values = layer.values.getActivated();
+        }
 
-        let secHiddenNeurons = this.weights.hiddenToHidden.getDotsMatrix(hiddenNeuronsActivated, this.bias);
-        let secHiddenNeuronsActivated = secHiddenNeurons.getActivated();
-
-        let outputNeurons = this.weights.outputToHidden.getDotsMatrix(secHiddenNeuronsActivated, this.bias);
-        return outputNeurons.getActivated();
+        return this.getLastLayer().values;
     }
 
     /**
@@ -74,19 +86,23 @@ class NeuralNet {
      * @returns {NeuralNet}
      */
     crossover(partner) {
-        let child = new NeuralNet(this.size.inputs, this.size.hidden, this.size.output);
-        child.weights.hiddenToInput = this.weights.hiddenToInput.crossover(partner.weights.hiddenToInput);
-        child.weights.hiddenToHidden = this.weights.hiddenToHidden.crossover(partner.weights.hiddenToHidden);
-        child.weights.outputToHidden = this.weights.outputToHidden.crossover(partner.weights.outputToHidden);
+        let child = new NeuralNet({
+            layers: this.layers,
+            weights: this.weights,
+            bias: this.bias,
+        });
+        for (let i = 0; i < this.weights; i++) {
+            child.weights[i].matrix = this.weights[i].matrix.crossover(partner.weights[i].matrix);
+        }
         return child;
     }
 
     clone() {
-        let clone = new NeuralNet(this.size.inputs, this.size.hidden, this.size.output);
-        this.forEachWeights((item, key) => {
-            clone.weights[key] = item;
+        return new NeuralNet({
+            layers: this.layers,
+            weights: this.weights,
+            bias: this.bias,
         });
-        return clone;
     }
 }
 

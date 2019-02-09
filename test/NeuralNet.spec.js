@@ -2,24 +2,38 @@ var expect = require("chai").expect;
 const Matrix = require('../app/Brain/Matrix.js');
 const NeuralNet = require('../app/Brain/NeuralNet.js');
 
-let neuralNet = new NeuralNet(0, 0, 0);
+let neuralNet = null;
 
 describe('NeuralNet', function () {
     beforeEach(() => {
-        neuralNet = new NeuralNet(12, 16, 4);
-    });
+        neuralNet = new NeuralNet({
+            layers: [
+                {name: 'input', size: 12},
+                {name: 'hiddenFirst', size: 16},
+                {name: 'hiddenSecond', size: 16},
+                {name: 'output', size: 4},
+            ],
+            weights: [
+                {'from': 'hiddenFirst', to: 'input'},
+                {'from': 'hiddenFirst', to: 'hiddenSecond'},
+                {'from': 'output', to: 'hiddenSecond'},
+            ],
+            bias: 0,
 
-    it('Has proper sizes', () => {
-        expect(neuralNet.size.inputs).to.be.equal(12);
-        expect(neuralNet.size.hidden).to.be.equal(16);
-        expect(neuralNet.size.output).to.be.equal(4);
+        });
     });
 
     describe('Weights', function () {
-        it('Has proper sizes after constructor', function () {
-            expect(neuralNet.weights.hiddenToInput.size).to.be.eql({x: 16, y: 12});
-            expect(neuralNet.weights.hiddenToHidden.size).to.be.eql({x: 16, y: 16});
-            expect(neuralNet.weights.outputToHidden.size).to.be.eql({x: 4, y: 16});
+        it('Has proper size after init', () => {
+            neuralNet.forEachWeights((matrix, weight) => {
+                let layer1 = neuralNet.getLayer(weight['from']);
+                let layer2 = neuralNet.getLayer(weight.to);
+
+                expect(weight.matrix.size).to.be.eql({
+                    x: layer1.size,
+                    y: layer2.size,
+                });
+            });
         });
 
         it('Has randomized values between -1 and 1', () => {
@@ -35,17 +49,16 @@ describe('NeuralNet', function () {
 
     it('Iterates through all weights by forEachWeights', () => {
         neuralNet.forEachWeights((matrix) => {
-            matrix.setForeach((number) => {
+            matrix.setForeach(() => {
                 return 3;
             });
         });
 
-        for (let key in neuralNet.weights) {
-            let item = neuralNet.weights[key];
-            item.foreach((number) => {
+        neuralNet.weights.forEach((item) => {
+            item.matrix.foreach((number) => {
                 expect(number).to.be.equal(3);
             });
-        }
+        });
     });
 
     it('Calculate output', () => {

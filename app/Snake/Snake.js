@@ -12,15 +12,15 @@ class Snake {
         this.alive = true;
         this.brain = new NeuralNet({
             layers: [
-                {name: 'input', size: 12},
-                {name: 'hiddenFirst', size: 16},
-                {name: 'hiddenSecond', size: 16},
+                {name: 'input', size: 4},
+                {name: 'hiddenFirst', size: 6},
+                {name: 'hiddenSecond', size: 6},
                 {name: 'output', size: 4},
             ],
             weights: [
-                {'from': 'hiddenFirst', to: 'input'},
+                {'from': 'input', to: 'hiddenFirst'},
                 {'from': 'hiddenFirst', to: 'hiddenSecond'},
-                {'from': 'output', to: 'hiddenSecond'},
+                {'from': 'hiddenSecond', to: 'output'},
             ],
             bias: 0,
         });
@@ -94,7 +94,7 @@ class Snake {
     }
 
     calcFitness() {
-        this.fitness = (this.moves - 10) + (this.bodySize - 2) ** 3;
+        this.fitness = (this.moves / 10);
     }
 
     clone() {

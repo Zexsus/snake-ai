@@ -36,7 +36,7 @@ class Game {
     setupEngine(){
         this.engine = new Engine({
             document: this.document,
-            fps: 60,
+            fps: 20,
             states: [
                 new GameObjectState('default', '#a4f2ff'),
                 new GameObjectState('wall', '#003b62'),
@@ -64,9 +64,20 @@ class Game {
         this.grid.draw();
     }
 
+    baseTraining() {
+        while (this.getSnake().moves < 30) {
+            this.trainingUpdate()
+        }
+    }
+
+    trainingUpdate() {
+        this.handleMotion();
+    }
+
     start(){
         this.initPopulation();
         this.isRunning = true;
+        this.baseTraining();
         this.engine.update(() => {
             if(this.isRunning)
                 this.update();

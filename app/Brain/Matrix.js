@@ -131,15 +131,18 @@ class Matrix{
      * @param {Matrix} otherMatrix
      */
     crossover(otherMatrix){
-        let child = new Matrix(this.size);
         let randColumn = Math.floor(Math.random() * this.size.x);
         let randRow = Math.floor(Math.random() * this.size.y);
+        return this.crossoverByParams(otherMatrix, randColumn, randRow);
+    }
 
+    crossoverByParams(otherMatrix, randColumn, randRow) {
+        let child = new Matrix(this.size);
         this.foreach((thisNumber, thisMatrix, thisPosition) => {
-            if((thisPosition.y < randRow) || (thisPosition.y === randRow && thisPosition.x <= randColumn)){
-                child.set(thisPosition, thisNumber);
-            }else{
-                child.set(thisPosition, otherMatrix.get(thisPosition));
+            if (thisPosition.y <= randRow && thisPosition.x <= randColumn) {
+                child.set(thisPosition, JSON.parse(JSON.stringify(thisNumber)));
+            } else {
+                child.set(thisPosition, JSON.parse(JSON.stringify(otherMatrix.get(thisPosition))));
             }
         });
 

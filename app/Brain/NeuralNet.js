@@ -12,8 +12,10 @@ class NeuralNet {
         this.layers = args.layers;
         this.bias = args.bias;
         this.weights = args.weights;
-        this.setupWeightsMatrixes();
-        this.randomizeWeights();
+        if (args.weights.length > 0 && typeof args.weights[0].matrix === "undefined") {
+            this.setupWeightsMatrixes();
+            this.randomizeWeights();
+        }
     }
 
     getLayer(name) {
@@ -30,7 +32,7 @@ class NeuralNet {
     setupWeightsMatrixes() {
         this.weights.forEach((item, index) => {
             let layers = [this.getLayer(item['from']), this.getLayer(item['to'])];
-            let size = new Vector2D(layers[0].size, layers[1].size);
+            let size = new Vector2D(layers[1].size, layers[0].size);
             this.weights[index].matrix = new Matrix(size);
         });
     }
@@ -98,11 +100,22 @@ class NeuralNet {
     }
 
     clone() {
-        return new NeuralNet({
-            layers: this.layers,
-            weights: this.weights,
+        let clone = new NeuralNet({
+            layers: [],
+            weights: [],
             bias: this.bias,
         });
+        this.forEachWeights((matrix, weight) => {
+            let cloneWeight = {
+                "from": weight['from'],
+                "to": weight['to']
+            };
+
+            cloneWeight.matrix = matrix.clone();
+            clone.weights.push(cloneWeight);
+        });
+        clone.layers = JSON.parse(JSON.stringify(this.layers));
+        return clone;
     }
 }
 

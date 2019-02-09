@@ -42,21 +42,19 @@ class Population {
             snake.calcFitness();
             fitnessSum += snake.fitness;
         });
+        this.setBestSnakeAndMaxFitness();
+        console.log(this.getPopulationData());
         this.naturalSelection(fitnessSum);
         this.generation += 1;
         this.currentBestScore = (this.currentBestScore < this.bestSnake.moves) ? this.bestSnake.moves : this.currentBestScore;
         this.actualSnake = 0;
         this.actualSnakeIndex = 0;
         this.setupSnakesStartState();
-        console.log(this.getPopulationData());
-
     }
 
     naturalSelection(fitnessSum) {
         let newSnakes = [];
-        this.setBestSnakeAndMaxFitness();
         newSnakes.push(this.bestSnake.clone());
-
         for (let i = 0; i < this.size - 1; i++) {
             let parent1 = this.selectRandomSnake(fitnessSum);
             let parent2 = this.selectRandomSnake(fitnessSum);
@@ -97,6 +95,7 @@ class Population {
             }
         });
 
+
         return chosenSnake;
     }
 
@@ -115,11 +114,16 @@ class Population {
     }
 
     getPopulationData() {
+        let fitnesses = [];
+        this.snakes.forEach((snake) => {
+            fitnesses.push(snake.fitness);
+        });
         return {
             name: 'Population log',
             bestSnakeBrain: this.bestSnake.brain,
             bestScore: this.currentBestScore,
             snakes: this.snakes,
+            fitnesses,
             generation: this.generation,
         };
     }

@@ -14,9 +14,9 @@ describe('NeuralNet', function () {
                 {name: 'output', size: 4},
             ],
             weights: [
-                {'from': 'hiddenFirst', to: 'input'},
+                {'from': 'input', to: 'hiddenFirst'},
                 {'from': 'hiddenFirst', to: 'hiddenSecond'},
-                {'from': 'output', to: 'hiddenSecond'},
+                {'from': 'hiddenSecond', to: 'output'},
             ],
             bias: 0,
 
@@ -30,8 +30,8 @@ describe('NeuralNet', function () {
                 let layer2 = neuralNet.getLayer(weight.to);
 
                 expect(weight.matrix.size).to.be.eql({
-                    x: layer1.size,
-                    y: layer2.size,
+                    x: layer2.size,
+                    y: layer1.size,
                 });
             });
         });
@@ -75,5 +75,8 @@ describe('NeuralNet', function () {
     it('Clones', () => {
         let clone = neuralNet.clone();
         expect(neuralNet).to.be.eql(clone);
+        clone.weights[0].matrix.matrix[0][0] = 15;
+        expect(clone.weights[0].matrix.matrix[0][0]).to.be.equal(15);
+        expect(neuralNet.weights[0].matrix.matrix[0][0]).to.not.be.equal(15);
     });
 });

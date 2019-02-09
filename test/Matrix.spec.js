@@ -87,6 +87,26 @@ describe("Matrix", function () {
         smallMatrix.mutate(0.5);
     });
 
+    it('Crossover', function () {
+        let matrix1 = new Matrix(new Vector2D(4, 4));
+        let matrix2 = new Matrix(new Vector2D(4, 4));
+
+        matrix1.setValuesFromArray([
+            0, 0, 0, 0,
+            0, 0, 0, 0,
+            0, 0, 0, 0,
+            0, 0, 0, 0,
+        ]);
+        matrix2.setValuesFromArray([
+            1, 1, 1, 1,
+            1, 1, 1, 1,
+            1, 1, 1, 1,
+            1, 1, 1, 1,
+        ]);
+
+        let child = matrix1.crossoverByParams(matrix2, 0, 0);
+    });
+
     it('Clone itself', function(){
         let smallMatrix = new Matrix(new Vector2D(4, 4));
         let values = [  10, 5, 12, 10,

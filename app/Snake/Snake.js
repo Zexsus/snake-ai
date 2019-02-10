@@ -1,7 +1,6 @@
 const BodyPart = require('./BodyPart.js');
 const NeuralNet = require('../Brain/NeuralNet.js');
 const directions = require('../Game/Directions.js');
-const clone = require('lodash.clonedeep');
 const config = require('../config.js');
 
 class Snake {

@@ -151,7 +151,9 @@ class Grid extends GameObject {
             if (states.indexOf(item.getState().name) === -1)
                 itemsWithoutStates.push(item);
         });
-
+        if (itemsWithoutStates.length === 0) {
+            debugger;
+        }
         return itemsWithoutStates;
     }
 
@@ -162,7 +164,9 @@ class Grid extends GameObject {
     getRandomItemWithout(states){
         let items = this.getItemsWithoutStates(states);
         let randomItemIndex = Math.floor((Math.random() * items.length));
-        console.log(randomItemIndex);
+        if (typeof items[randomItemIndex] === "undefined") {
+            debugger;
+        }
         return items[randomItemIndex];
     }
 

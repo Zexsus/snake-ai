@@ -1,7 +1,15 @@
 class Chart {
     constructor(params) {
         Object.assign(this, params);
+        this.wasSetup = false;
         if (typeof google !== "undefined") {
+            this.setup()
+        }
+    }
+
+    setup() {
+        if (!this.wasSetup) {
+            this.wasSetup = true;
             this.createChart();
             this.chartOptions = {
                 title: 'Snakes Learning curve',
@@ -33,7 +41,7 @@ class Chart {
     }
 
     addData(newData) {
-        if (this.data.length > 100) {
+        if (this.data.length > 200) {
             this.data.splice(1, 1);
         }
         this.data.push(newData);
@@ -49,6 +57,7 @@ class Chart {
     createChart() {
         google.charts.load('current', {'packages': ['corechart']});
         google.charts.setOnLoadCallback(() => {
+            this.setup();
             this.initChart()
         });
     }

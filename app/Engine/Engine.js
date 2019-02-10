@@ -1,6 +1,8 @@
 const Loop = require('./Loop.js');
 const GameObject = require('../Game/GameObjects/GameObject.js');
 const Vector2D = require('./Vector2D.js');
+const clone = require('lodash.clonedeep');
+
 
 class Engine {
 
@@ -38,7 +40,7 @@ class Engine {
         });
 
         if (statesWithName.length > 0) {
-            return statesWithName[0];
+            return clone(statesWithName[0]);
         } else {
             throw "There is no such state with name: " + name;
         }

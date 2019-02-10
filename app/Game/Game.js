@@ -22,7 +22,6 @@ class Game {
         this.movesWithoutGrow = 0;
         if (!this.gameAwaken) this.awake();
         this.isStillTraining = config.trainingCondition;
-        // this.start();
     }
 
     awake(){
@@ -108,7 +107,7 @@ class Game {
 
     restartGame() {
         this.grid.resetStatesWithout(['wall']);
-        // this.generateFood();
+        this.generateFood();
         this.grid.clear();
         this.grid.draw();
         this.movesWithoutGrow = 0;
@@ -141,10 +140,8 @@ class Game {
     }
 
     generateFood(){
+        this.grid.resetStatesWithout(['wall']);
         let randomItem = this.grid.getRandomItemWithout(['wall', 'head', 'body', 'food']);
-        if (typeof randomItem === "undefined") {
-            debugger;
-        }
         randomItem.setState(this.engine.getState('food'));
         this.foodItem = randomItem;
     }
@@ -166,7 +163,6 @@ class Game {
 
     handleCollisions(){
         let item = this.grid.getItem(this.getSnake().head.position);
-
         if(item.hasState('wall')){
             this.onWallCollision();
         }

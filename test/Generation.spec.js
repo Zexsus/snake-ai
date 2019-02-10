@@ -44,6 +44,7 @@ describe('Generation', function () {
         generation.foreachSnake((snake, index) => {
             snake.moves = index;
             snake.calcFitness();
+            snake.fitness = index;
         });
 
         let bestSnake = generation.getBestSnake();
@@ -94,6 +95,17 @@ describe('Generation', function () {
         });
 
         expect(generation.isDead()).to.be.equal(true);
+    });
+
+    it('Returns best snakes', () => {
+        generation.foreachSnake((snake, index) => {
+            snake.fitness = index * 10;
+        });
+        let bestSnakes = generation.getBestSnakes();
+        expect(bestSnakes.length).to.be.equal(5);
+        bestSnakes.forEach((snake, index) => {
+            expect(snake.fitness).to.be.equal(90 - (10 * index));
+        });
     });
 
     it('Calc fitnesses', () => {

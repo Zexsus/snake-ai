@@ -25,6 +25,9 @@ class Population {
         this.currentBestScore = this.generation.getBestSnake().moves,
             this.onPopulationEnd(this);
         this.fitnessSum = this.generation.getFitnessSum();
+        if (this.generation.number % 10 === 0) {
+            console.clear();
+        }
         console.log(this.getPopulationData());
         this.naturalSelection();
         this.generation.number += 1;
@@ -32,14 +35,16 @@ class Population {
 
     naturalSelection() {
         let newSnakes = [];
-        newSnakes.push(this.generation.getBestSnake().clone());
-        for (let i = 0; i < this.generation.size - 1; i++) {
+        let bestSnakes = this.generation.getBestSnakes();
+        bestSnakes.forEach((snake) => {
+            newSnakes.push(snake.clone());
+        });
+        for (let i = 0; i < this.generation.size - this.generation.size * config.howManyBestSnakesStay; i++) {
             let parent1 = this.generation.getRandomSnake();
             let parent2 = this.generation.getRandomSnake();
             if (parent1.id === parent2.id) {
                 throw new Error('Two random snake in row are the same');
             }
-            // console.log(i+' Crossover over:', parent1.fitness, parent2.fitness);
             let child = parent1.crossover(parent2);
             child.mutate(this.mutationRate);
             newSnakes.push(child);
@@ -58,6 +63,7 @@ class Population {
             fitnessSum: this.generation.getFitnessSum(),
             // bestSnakeScore: this.generation.getBestSnake().moves,
             populationBestScore: this.currentBestScore,
+            bestSnakes: this.generation.getBestSnakes(),
             generation: this.generation.number,
             // bestSnakeBrain: this.generation.getBestSnake().brain,
         };

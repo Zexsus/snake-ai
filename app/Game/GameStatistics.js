@@ -20,8 +20,8 @@ class GameStatistics{
         let stats = this.getStatistics();
         return [
             stats.wallDistances.right, stats.wallDistances.left, stats.wallDistances.up, stats.wallDistances.down,
-            // stats.bodyDistances.right, stats.bodyDistances.left, stats.bodyDistances.up, stats.bodyDistances.down,
-            // stats.foodDistances.right, stats.foodDistances.left, stats.foodDistances.up, stats.foodDistances.down,
+            stats.bodyDistances.right, stats.bodyDistances.left, stats.bodyDistances.up, stats.bodyDistances.down,
+            stats.foodDistances.right, stats.foodDistances.left, stats.foodDistances.up, stats.foodDistances.down,
         ]
     }
 

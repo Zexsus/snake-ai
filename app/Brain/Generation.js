@@ -1,5 +1,6 @@
 const Snake = require("../Snake/Snake.js");
 const Vector2D = require("../Engine/Vector2D.js");
+const config = require("../config.js");
 const clone = require('lodash.clonedeep');
 
 class Generation {
@@ -50,12 +51,19 @@ class Generation {
         let max = 0;
         let bestSnake = null;
         this.snakes.forEach(snake => {
-            if (snake.fitness > max) {
+            if (snake.fitness >= max) {
                 max = snake.fitness;
                 bestSnake = snake;
             }
         });
         return bestSnake;
+    }
+
+    getBestSnakes() {
+        let getSnakesSorted = this.snakes.sort((a, b) => {
+            return b.fitness - a.fitness
+        });
+        return getSnakesSorted.slice(0, this.size * config.howManyBestSnakesStay);
     }
 
     getMaxFitness() {
@@ -90,7 +98,6 @@ class Generation {
             for (let index = 0; index < snakes.length; index++) {
                 if (this.chosenSnakeBefore === this.snakes[index].id) {
                     snakes.splice(index, 1);
-                    // console.log("Removed snake id", this.chosenSnakeBefore)
                 }
             }
         }

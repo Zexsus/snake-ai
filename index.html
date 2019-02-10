@@ -9,48 +9,25 @@
             font-family: 'Roboto', sans-serif;
         }
 
-        th{
-            border-bottom: 1px solid #007f00;
+        .row {
+            display: flex;
         }
 
-        th, td{
-            padding: 5px 10px;
+        .column {
+            flex: 1 1 auto;
         }
     </style>
 </head>
 <body>
+<div class="row">
+    <div class="column" id="engine">
 
-    <h2>Stats</h2>
+    </div>
+    <div class="column" id="chart">
 
-    <table>
-        <tr>
-            <th>
-                Wall distances
-            </th>
-
-            <th>
-                Body distances
-            </th>
-
-            <th>
-                Food distances
-            </th>
-        </tr>
-
-        <tr>
-            <td id="wall-distances">
-
-            </td>
-
-            <td id="body-distances">
-
-            </td>
-
-            <td id="food-distances">
-
-            </td>
-        </tr>
-    </table>
+    </div>
+</div>
 </body>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script src="dist/app.js"></script>
 </html>

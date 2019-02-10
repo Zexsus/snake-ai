@@ -1,12 +1,14 @@
 const Generation = require("./Generation.js");
+const config = require("../config.js");
 
 class Population {
     /**
      * @param {Number} size
      */
     constructor(size) {
-        this.mutationRate = 0.1;
-        this.generation = new Generation(size);
+        this.mutationRate = config.mutationRate;
+        this.generation = new Generation(config.generationSize);
+        this.fitnessSum = 0;
         this.currentBestScore = 0;
     }
 
@@ -20,6 +22,9 @@ class Population {
 
     endPopulation() {
         this.generation.calcFitnesses();
+        this.currentBestScore = this.generation.getBestSnake().moves,
+            this.onPopulationEnd(this);
+        this.fitnessSum = this.generation.getFitnessSum();
         console.log(this.getPopulationData());
         this.naturalSelection();
         this.generation.number += 1;
@@ -48,14 +53,17 @@ class Population {
             fitnesses.push(snake.fitness);
         });
         return {
-            name: 'Population log',
+            // name: 'Population log',
             fitnesses,
             fitnessSum: this.generation.getFitnessSum(),
-            bestSnakeScore: this.generation.getBestSnake().moves,
+            // bestSnakeScore: this.generation.getBestSnake().moves,
             populationBestScore: this.currentBestScore,
-            generation: this.generation,
-            bestSnakeBrain: this.generation.getBestSnake().brain,
+            generation: this.generation.number,
+            // bestSnakeBrain: this.generation.getBestSnake().brain,
         };
+    }
+
+    onPopulationEnd(population) {
     }
 }
 

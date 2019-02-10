@@ -2,6 +2,7 @@ const BodyPart = require('./BodyPart.js');
 const NeuralNet = require('../Brain/NeuralNet.js');
 const directions = require('../Game/Directions.js');
 const clone = require('lodash.clonedeep');
+const config = require('../config.js');
 
 class Snake {
     constructor(id) {
@@ -12,20 +13,8 @@ class Snake {
         this.id = id;
         this.directionChanges = 0;
         this.alive = true;
-        this.brain = new NeuralNet({
-            layers: [
-                {name: 'input', size: 4},
-                {name: 'hiddenFirst', size: 6},
-                // {name: 'hiddenSecond', size: 8},
-                {name: 'output', size: 4},
-            ],
-            weights: [
-                {'from': 'input', to: 'hiddenFirst'},
-                // {'from': 'hiddenFirst', to: 'hiddenSecond'},
-                {'from': 'hiddenFirst', to: 'output'},
-            ],
-            bias: 0,
-        });
+        this.brain = new NeuralNet(config.neuralNetConfig);
+        this.calcFitness = config.calcFitness;
     }
 
     setDefaults(){
@@ -96,7 +85,7 @@ class Snake {
     }
 
     calcFitness() {
-        this.fitness = (this.moves - 16);
+        this.fitness = this.moves;
     }
 
     clone() {

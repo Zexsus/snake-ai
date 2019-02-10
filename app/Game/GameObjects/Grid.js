@@ -162,6 +162,7 @@ class Grid extends GameObject {
     getRandomItemWithout(states){
         let items = this.getItemsWithoutStates(states);
         let randomItemIndex = Math.floor((Math.random() * items.length));
+        console.log(randomItemIndex);
         return items[randomItemIndex];
     }
 

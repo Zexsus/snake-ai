@@ -11,6 +11,7 @@ class Engine {
      * @param {int} params.fps
      */
     constructor(params) {
+        this.containerSelector = params.containerSelector;
         this.canvas = this.prepareCanvas(params.document, params.canvasSettings);
         this.ctx = this.getContext();
         this.states = params.states;
@@ -48,7 +49,11 @@ class Engine {
         canvas.width = params.width;
         canvas.height = params.height;
         Object.assign(canvas.style, params.style);
-        document.body.appendChild(canvas);
+        if (typeof this.containerSelector !== "undefined") {
+            document.getElementById(this.containerSelector).appendChild(canvas);
+        } else {
+            document.body.appendChild(canvas);
+        }
         return canvas;
     };
 

@@ -120,6 +120,10 @@ class Generation {
 
         return isDead;
     }
+
+    getAverageFitness() {
+        return this.getFitnessSum() / this.size;
+    }
 }
 
 module.exports = Generation;

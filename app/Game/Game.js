@@ -2,7 +2,8 @@ const GameObjectState = require("../Engine/GameObjectState.js");
 const Engine = require("../Engine/Engine.js");
 const Grid = require("./GameObjects/Grid.js");
 const Vector2D = require("../Engine/Vector2D.js");
-const config = require('./game-config.json');
+const gameConfig = require('./game-config.json');
+const config = require('../config.js');
 const GridSnakeInterface = require('../Snake/GridSnakeInterface.js');
 const Population = require('../Brain/Population.js');
 const GameStatistics = require('./GameStatistics.js');
@@ -20,13 +21,15 @@ class Game {
         this.foodItem = null;
         this.movesWithoutGrow = 0;
         if (!this.gameAwaken) this.awake();
-        this.start();
+        this.isStillTraining = config.trainingCondition;
+        // this.start();
     }
 
     awake(){
         this.setupEngine();
         this.setupGrid();
         this.generateFood();
+        this.initPopulation();
 
         if(!this.gameAwaken){
             this.gameAwaken = true;
@@ -36,6 +39,7 @@ class Game {
     setupEngine(){
         this.engine = new Engine({
             document: this.document,
+            containerSelector: 'engine',
             fps: 60,
             states: [
                 new GameObjectState('default', '#a4f2ff'),
@@ -45,8 +49,8 @@ class Game {
                 new GameObjectState('head', '#d75600'),
             ],
             canvasSettings: {
-                width: config.canvas.width,
-                height: config.canvas.height,
+                width: gameConfig.canvas.width,
+                height: gameConfig.canvas.height,
                 style: {
                     border: "2px solid black",
                     padding: "2px",
@@ -65,7 +69,7 @@ class Game {
     }
 
     baseTraining() {
-        while ((this.getSnake().moves < 99) && !(this.population.generation.number > 200)) {
+        while (this.isStillTraining()) {
             this.trainingUpdate()
         }
     }
@@ -75,9 +79,9 @@ class Game {
     }
 
     start(){
-        this.initPopulation();
         this.isRunning = true;
         this.baseTraining();
+        this.onBaseLearningEnd();
         this.engine.update(() => {
             if(this.isRunning)
                 this.update();
@@ -104,7 +108,7 @@ class Game {
 
     restartGame() {
         this.grid.resetStatesWithout(['wall']);
-        this.generateFood();
+        // this.generateFood();
         this.grid.clear();
         this.grid.draw();
         this.movesWithoutGrow = 0;
@@ -122,7 +126,7 @@ class Game {
         this.getSnake().move();
         this.handleCollisions(this.getSnake(), this.grid, this.engine);
         this.movesWithoutGrow += 1;
-        if (this.movesWithoutGrow > 100) {
+        if (this.movesWithoutGrow > config.snakeMaxNoFoodMoves) {
             this.snakeDie();
         }
 
@@ -138,6 +142,9 @@ class Game {
 
     generateFood(){
         let randomItem = this.grid.getRandomItemWithout(['wall', 'head', 'body', 'food']);
+        if (typeof randomItem === "undefined") {
+            debugger;
+        }
         randomItem.setState(this.engine.getState('food'));
         this.foodItem = randomItem;
     }
@@ -185,6 +192,12 @@ class Game {
         this.getSnake().grow();
         this.generateFood();
         this.movesWithoutGrow = 0;
+    }
+
+    onBaseLearningEnd() {
+    }
+
+    isStillTraining() {
     }
 }
 

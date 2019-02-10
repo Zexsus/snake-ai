@@ -36,7 +36,7 @@ class Game {
     setupEngine(){
         this.engine = new Engine({
             document: this.document,
-            fps: 20,
+            fps: 60,
             states: [
                 new GameObjectState('default', '#a4f2ff'),
                 new GameObjectState('wall', '#003b62'),
@@ -65,7 +65,7 @@ class Game {
     }
 
     baseTraining() {
-        while (this.getSnake().moves < 30) {
+        while ((this.getSnake().moves < 99) && !(this.population.generation.number > 200)) {
             this.trainingUpdate()
         }
     }
@@ -85,7 +85,7 @@ class Game {
     }
 
     getSnake() {
-        return this.population.actualSnake;
+        return this.population.generation.actualSnake;
     }
 
     /**
@@ -122,7 +122,7 @@ class Game {
         this.getSnake().move();
         this.handleCollisions(this.getSnake(), this.grid, this.engine);
         this.movesWithoutGrow += 1;
-        if (this.movesWithoutGrow > 300) {
+        if (this.movesWithoutGrow > 100) {
             this.snakeDie();
         }
 

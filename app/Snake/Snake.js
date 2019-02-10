@@ -1,26 +1,28 @@
 const BodyPart = require('./BodyPart.js');
 const NeuralNet = require('../Brain/NeuralNet.js');
 const directions = require('../Game/Directions.js');
+const clone = require('lodash.clonedeep');
 
 class Snake {
-    constructor() {
+    constructor(id) {
         this.setDefaults();
         this.bodySize = 0;
         this.fitness = 0;
         this.moves = 0;
+        this.id = id;
         this.directionChanges = 0;
         this.alive = true;
         this.brain = new NeuralNet({
             layers: [
                 {name: 'input', size: 4},
                 {name: 'hiddenFirst', size: 6},
-                {name: 'hiddenSecond', size: 6},
+                // {name: 'hiddenSecond', size: 8},
                 {name: 'output', size: 4},
             ],
             weights: [
                 {'from': 'input', to: 'hiddenFirst'},
-                {'from': 'hiddenFirst', to: 'hiddenSecond'},
-                {'from': 'hiddenSecond', to: 'output'},
+                // {'from': 'hiddenFirst', to: 'hiddenSecond'},
+                {'from': 'hiddenFirst', to: 'output'},
             ],
             bias: 0,
         });
@@ -48,7 +50,7 @@ class Snake {
         }
 
         if (this.isWrongDirection(direction)) {
-            console.error("You are trying to move snake in the oposite direction");
+            // console.error("You are trying to move snake in the oposite direction");
         } else {
             this.directionChanges += 1;
             this.direction = direction;
@@ -94,15 +96,19 @@ class Snake {
     }
 
     calcFitness() {
-        this.fitness = (this.moves / 10);
+        this.fitness = (this.moves - 16);
     }
 
     clone() {
-        let clone = new Snake();
+        let clone = new Snake(this.id);
         clone.brain = this.brain.clone();
         return clone;
     };
 
+    /**
+     * @param {Snake} snake
+     * @returns {Snake}
+     */
     crossover(snake) {
         let child = this.clone();
         child.brain = this.brain.crossover(snake.brain);
@@ -110,7 +116,8 @@ class Snake {
     }
 
     mutate(rate) {
-        this.brain.mutate(rate)
+        this.brain.mutate(rate);
+        return this;
     }
 
     decideDirection(input) {

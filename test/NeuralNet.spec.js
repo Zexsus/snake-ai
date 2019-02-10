@@ -72,6 +72,28 @@ describe('NeuralNet', function () {
         })
     });
 
+    it('Crossover', () => {
+        neuralNet2 = new NeuralNet({
+            layers: [
+                {name: 'input', size: 12},
+                {name: 'hiddenFirst', size: 16},
+                {name: 'hiddenSecond', size: 16},
+                {name: 'output', size: 4},
+            ],
+            weights: [
+                {'from': 'input', to: 'hiddenFirst'},
+                {'from': 'hiddenFirst', to: 'hiddenSecond'},
+                {'from': 'hiddenSecond', to: 'output'},
+            ],
+            bias: 0,
+        });
+
+        let child = neuralNet.crossover(neuralNet2);
+
+        expect(child.weights).to.not.be.eql(neuralNet.weights);
+        expect(child.weights).to.not.be.eql(neuralNet2.weights);
+    });
+
     it('Clones', () => {
         let clone = neuralNet.clone();
         expect(neuralNet).to.be.eql(clone);

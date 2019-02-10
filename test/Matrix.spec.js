@@ -77,34 +77,77 @@ describe("Matrix", function () {
 
     it('Mutate', function(){
         let smallMatrix = new Matrix(new Vector2D(4, 4));
-        let values = [  10, 5, 12, 10,
+        let values = [
+            10, 5, 12, 10,
             4, 13, 12, 11,
             14, 12, 44, 121,
             1, 111, 22, 344];
-
         smallMatrix.setValuesFromArray(values);
-
+        let save = smallMatrix.clone();
         smallMatrix.mutate(0.5);
+        expect(smallMatrix).to.be.not.eql(save);
     });
 
-    it('Crossover', function () {
+    it('Mutate single value', () => {
+        let value = 0.2;
+        let mutatedValue = matrix.getMutatedValue(value, 0.3, 0.1);
+        expect(mutatedValue).to.be.not.equal(value);
+
+        let mutatedValue2 = matrix.getMutatedValue(value, 0.3, 0.7);
+        expect(mutatedValue2).to.be.equal(value);
+    });
+
+    describe('Crossover', function () {
         let matrix1 = new Matrix(new Vector2D(4, 4));
         let matrix2 = new Matrix(new Vector2D(4, 4));
 
-        matrix1.setValuesFromArray([
-            0, 0, 0, 0,
-            0, 0, 0, 0,
-            0, 0, 0, 0,
-            0, 0, 0, 0,
-        ]);
-        matrix2.setValuesFromArray([
-            1, 1, 1, 1,
-            1, 1, 1, 1,
-            1, 1, 1, 1,
-            1, 1, 1, 1,
-        ]);
-
-        let child = matrix1.crossoverByParams(matrix2, 0, 0);
+        beforeEach(() => {
+            matrix1.setValuesFromArray([
+                0, 0, 0, 0,
+                0, 0, 0, 0,
+                0, 0, 0, 0,
+                0, 0, 0, 0,
+            ]);
+            matrix2.setValuesFromArray([
+                1, 1, 1, 1,
+                1, 1, 1, 1,
+                1, 1, 1, 1,
+                1, 1, 1, 1,
+            ]);
+        });
+        it('Child is equal to second parent when random values are lowest', function () {
+            let child = matrix1.crossoverByParams(matrix2, 0);
+            let expected = new Matrix(new Vector2D(4, 4));
+            expected.setValuesFromArray([
+                1, 1, 1, 1,
+                1, 1, 1, 1,
+                1, 1, 1, 1,
+                1, 1, 1, 1,
+            ]);
+            expect(child).to.be.eql(expected);
+        });
+        it('Child is equal to second parent when random values are highest', function () {
+            let child = matrix1.crossoverByParams(matrix2, 16);
+            let expected = new Matrix(new Vector2D(4, 4));
+            expected.setValuesFromArray([
+                0, 0, 0, 0,
+                0, 0, 0, 0,
+                0, 0, 0, 0,
+                0, 0, 0, 0,
+            ]);
+            expect(child).to.be.eql(expected);
+        });
+        it('Child is half of it parents when random values are in the middle', function () {
+            let child = matrix1.crossoverByParams(matrix2, 8);
+            let expected = new Matrix(new Vector2D(4, 4));
+            expected.setValuesFromArray([
+                0, 0, 0, 0,
+                0, 0, 0, 0,
+                1, 1, 1, 1,
+                1, 1, 1, 1,
+            ]);
+            expect(child).to.be.eql(expected);
+        })
     });
 
     it('Clone itself', function(){

@@ -1,4 +1,5 @@
 const Vector2D = require('../Engine/Vector2D.js');
+const clone = require('lodash.clonedeep');
 
 class Matrix{
 
@@ -107,39 +108,34 @@ class Matrix{
     mutate(mutationRate) {
         this.setForeach((number) => {
             let rand = Math.random();
-            let newValue = number;
-            if (rand < mutationRate) {
-                newValue += Matrix.gaussianRand() / 5;
-                if (newValue > 1) newValue = 1;
-                if (newValue < -1) newValue = -1;
-            }
-            return newValue;
+            return this.getMutatedValue(number, mutationRate, rand);
         });
     }
 
-    static gaussianRand() {
-        var rand = 0;
-
-        for (var i = 0; i < 6; i += 1) {
-            rand += Math.random();
+    getMutatedValue(value, mutationRate, random) {
+        let newValue = value;
+        if (random < mutationRate) {
+            let mutation = (Math.random() * 2 - 1);
+            newValue += mutation;
+            // console.log('Mutation', mutation);
         }
-
-        return rand / 6;
+        return newValue;
     }
 
     /**
      * @param {Matrix} otherMatrix
      */
     crossover(otherMatrix){
-        let randColumn = Math.floor(Math.random() * this.size.x);
-        let randRow = Math.floor(Math.random() * this.size.y);
-        return this.crossoverByParams(otherMatrix, randColumn, randRow);
+        let random = Math.floor(Math.random() * this.size.x * this.size.y);
+        // console.log('Random crossover value:', random);
+        return this.crossoverByParams(otherMatrix, random);
     }
 
-    crossoverByParams(otherMatrix, randColumn, randRow) {
+    crossoverByParams(otherMatrix, random) {
         let child = new Matrix(this.size);
         this.foreach((thisNumber, thisMatrix, thisPosition) => {
-            if (thisPosition.y <= randRow && thisPosition.x <= randColumn) {
+            let itemIndex = (thisPosition.y * thisMatrix.size.x) + thisPosition.x;
+            if (itemIndex < random) {
                 child.set(thisPosition, JSON.parse(JSON.stringify(thisNumber)));
             } else {
                 child.set(thisPosition, JSON.parse(JSON.stringify(otherMatrix.get(thisPosition))));
@@ -150,11 +146,7 @@ class Matrix{
     }
 
     clone() {
-        let clone = new Matrix(this.size);
-        this.foreach((value, matrix, position) => {
-            clone.set(position, value);
-        });
-        return clone;
+        return clone(this);
     }
 
     /**

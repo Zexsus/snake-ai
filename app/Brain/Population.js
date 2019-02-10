@@ -1,130 +1,60 @@
-const Snake = require("../Snake/Snake.js");
-const Vector2D = require("../Engine/Vector2D.js");
+const Generation = require("./Generation.js");
 
 class Population {
     /**
      * @param {Number} size
      */
     constructor(size) {
-        this.snakes = Population.getInitSnakes(size);
-        this.size = size;
         this.mutationRate = 0.1;
-        this.generation = 1;
-        this.setupSnakesStartState();
-        this.actualSnakeIndex = 0;
-        this.actualSnake = this.snakes[this.actualSnakeIndex];
+        this.generation = new Generation(size);
         this.currentBestScore = 0;
     }
 
-    setupSnakesStartState() {
-        this.snakes.forEach(snake => {
-            snake.head.setPosition(new Vector2D(16, 16));
-            snake.grow().grow().grow();
-        });
-    }
-
     getNextSnake() {
-        if (this.actualSnakeIndex < this.snakes.length - 1) {
-            this.actualSnakeIndex += 1;
-        } else {
+        if (this.generation.isDead()) {
             this.endPopulation();
+            return this.generation.actualSnake;
         }
-
-        this.actualSnake = this.snakes[this.actualSnakeIndex];
+        return this.generation.getNextSnake();
     }
 
-    /**
-     * @returns {Snake}
-     */
     endPopulation() {
-        let fitnessSum = 0;
-        this.snakes.forEach((snake, index) => {
-            snake.calcFitness();
-            fitnessSum += snake.fitness;
-        });
-        this.setBestSnakeAndMaxFitness();
+        this.generation.calcFitnesses();
         console.log(this.getPopulationData());
-        this.naturalSelection(fitnessSum);
-        this.generation += 1;
-        this.currentBestScore = (this.currentBestScore < this.bestSnake.moves) ? this.bestSnake.moves : this.currentBestScore;
-        this.actualSnake = 0;
-        this.actualSnakeIndex = 0;
-        this.setupSnakesStartState();
+        this.naturalSelection();
+        this.generation.number += 1;
     }
 
-    naturalSelection(fitnessSum) {
+    naturalSelection() {
         let newSnakes = [];
-        newSnakes.push(this.bestSnake.clone());
-        for (let i = 0; i < this.size - 1; i++) {
-            let parent1 = this.selectRandomSnake(fitnessSum);
-            let parent2 = this.selectRandomSnake(fitnessSum);
+        newSnakes.push(this.generation.getBestSnake().clone());
+        for (let i = 0; i < this.generation.size - 1; i++) {
+            let parent1 = this.generation.getRandomSnake();
+            let parent2 = this.generation.getRandomSnake();
+            if (parent1.id === parent2.id) {
+                throw new Error('Two random snake in row are the same');
+            }
+            // console.log(i+' Crossover over:', parent1.fitness, parent2.fitness);
             let child = parent1.crossover(parent2);
             child.mutate(this.mutationRate);
             newSnakes.push(child);
         }
-
-        this.snakes = newSnakes;
-    }
-
-    setBestSnakeAndMaxFitness() {
-        let max = 0;
-        let bestSnake = null;
-        this.snakes.forEach(snake => {
-            if (snake.fitness > max) {
-                max = snake.fitness;
-                bestSnake = snake;
-            }
-        });
-        this.bestFitness = max;
-        this.bestSnake = bestSnake;
-        // this.bestSnake.consoleBrain();
-    }
-
-    /**
-     * @param fitnessSum
-     * @returns {Snake}
-     */
-    selectRandomSnake(fitnessSum) {
-        let runningFitness = 0;
-        let randomValue = Math.random() * fitnessSum;
-        let chosenSnake = null;
-        this.snakes.forEach((snake) => {
-            runningFitness += snake.fitness;
-            if (runningFitness >= randomValue && chosenSnake === null) {
-                chosenSnake = snake;
-            }
-        });
-
-
-        return chosenSnake;
-    }
-
-    /**
-     * @param {Number} size
-     * @returns {Array.<Snake>}
-     */
-    static getInitSnakes(size) {
-        let snakes = [];
-        for (let i = 0; i < size; i++) {
-            let snake = new Snake();
-            snakes.push(snake);
-
-        }
-        return snakes;
+        this.generation.setSnakes(newSnakes);
     }
 
     getPopulationData() {
         let fitnesses = [];
-        this.snakes.forEach((snake) => {
+        this.generation.foreachSnake((snake) => {
             fitnesses.push(snake.fitness);
         });
         return {
             name: 'Population log',
-            bestSnakeBrain: this.bestSnake.brain,
-            bestScore: this.currentBestScore,
-            snakes: this.snakes,
             fitnesses,
+            fitnessSum: this.generation.getFitnessSum(),
+            bestSnakeScore: this.generation.getBestSnake().moves,
+            populationBestScore: this.currentBestScore,
             generation: this.generation,
+            bestSnakeBrain: this.generation.getBestSnake().brain,
         };
     }
 }

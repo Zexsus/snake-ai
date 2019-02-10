@@ -1,5 +1,6 @@
 const Matrix = require('./Matrix.js');
 const Vector2D = require('../Engine/Vector2D.js');
+const clone = require('lodash.clonedeep');
 
 class NeuralNet {
     /**
@@ -89,33 +90,27 @@ class NeuralNet {
      */
     crossover(partner) {
         let child = new NeuralNet({
-            layers: this.layers,
-            weights: this.weights,
-            bias: this.bias,
+            layers: clone(this.layers),
+            weights: clone(this.weights),
+            bias: clone(this.bias),
         });
-        for (let i = 0; i < this.weights; i++) {
-            child.weights[i].matrix = this.weights[i].matrix.crossover(partner.weights[i].matrix);
+        for (let i = 0; i < this.weights.length; i++) {
+            let thisMatrix = this.weights[i].matrix;
+            let partnerMatrix = partner.weights[i].matrix;
+            child.weights[i].matrix = thisMatrix.crossover(partnerMatrix);
         }
         return child;
     }
 
     clone() {
-        let clone = new NeuralNet({
-            layers: [],
-            weights: [],
-            bias: this.bias,
-        });
-        this.forEachWeights((matrix, weight) => {
-            let cloneWeight = {
-                "from": weight['from'],
-                "to": weight['to']
-            };
+        return clone(this);
+    }
 
-            cloneWeight.matrix = matrix.clone();
-            clone.weights.push(cloneWeight);
-        });
-        clone.layers = JSON.parse(JSON.stringify(this.layers));
-        return clone;
+    displayTable() {
+        console.table(this.weights[0].matrix.matrix);
+        console.table(this.weights[1].matrix.matrix);
+        console.table(this.weights[2].matrix.matrix);
+        console.table(this.weights[3].matrix.matrix);
     }
 }
 

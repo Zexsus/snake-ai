@@ -6,7 +6,7 @@ describe('Snake', function(){
     let snake = null;
 
     beforeEach(function(){
-        snake = new Snake();
+        snake = new Snake(1);
         snake.setDirection(directions.right);
         snake.head.setPosition({x: 0, y: 0});
         snake

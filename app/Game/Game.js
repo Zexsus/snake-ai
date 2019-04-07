@@ -39,7 +39,7 @@ class Game {
         this.engine = new Engine({
             document: this.document,
             containerSelector: 'engine',
-            fps: 60,
+            fps: 1,
             states: [
                 new GameObjectState('default', '#a4f2ff'),
                 new GameObjectState('wall', '#003b62'),
@@ -121,6 +121,7 @@ class Game {
 
     handleMotion(){
         let input = this.gameStats.getStatisticsArray();
+        console.log(input);
         this.getSnake().decideDirection(input);
         this.getSnake().move();
         this.handleCollisions(this.getSnake(), this.grid, this.engine);

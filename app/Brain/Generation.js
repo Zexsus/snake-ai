@@ -3,6 +3,10 @@ const Vector2D = require("../Engine/Vector2D.js");
 const config = require("../config.js");
 const clone = require('lodash.clonedeep');
 
+/**
+ * Contains all snakes and provides data about them
+ * @param {Vector2D size}
+ */
 class Generation {
     constructor(size) {
         this.size = size;

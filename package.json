@@ -17,13 +17,16 @@
     "browserify": "^16.2.3",
     "canvas": "^1.6.12",
     "chai": "^4.2.0",
+    "documentation": "^9.1.1",
     "gulp": "^3.9.1",
+    "gulp-documentation": "^3.2.1",
     "jsdom": "^12.1.0",
     "mocha-chrome": "^1.1.0",
     "mocha-jsdom": "^2.0.0",
     "vinyl-source-stream": "^2.0.0"
   },
   "dependencies": {
+    "gulp-documentation": "^3.2.1",
     "lodash.clone": "^4.5.0",
     "lodash.clonedeep": "^4.5.0",
     "mocha": "^5.2.0"

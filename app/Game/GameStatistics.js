@@ -10,66 +10,56 @@ class GameStatistics{
     getStatistics(){
         return {
             direction: this.game.getSnake().direction,
-            wallDistances: this.getDistancesToWall(),
-            bodyDistances: this.getDistancesToBody(),
+            collisionDistance: this.getCollisionDistance(),
             foodDistances: this.getDistancesToFood(),
         };
+    }
+
+    getCollisionDistance() {
+        let distances = {
+            up: 100,
+            left: 100,
+            down: 100,
+            right: 100,
+        };
+        this.game.grid.each((item) => {
+            let position = item.getPositionInGrid();
+            let snakeHeadPostion = this.game.getSnake().head.position;
+            let isCollider = item.hasState('wall') || item.hasState('body');
+            let xDifference = Math.abs(position.x - snakeHeadPostion.x);
+            let yDifference = Math.abs(position.y - snakeHeadPostion.y);
+            if (isCollider) {
+                if (position.y === snakeHeadPostion.y) {
+                    if (position.x < snakeHeadPostion.x && distances.left > xDifference) {
+                        distances.left = xDifference;
+                    }
+                    if (position.x > snakeHeadPostion.x && distances.right > xDifference) {
+                        distances.right = xDifference;
+                    }
+                }
+                if (position.x === snakeHeadPostion.x) {
+                    if (position.y < snakeHeadPostion.y && distances.up > yDifference) {
+                        distances.up = yDifference;
+                    }
+                    if (position.y > snakeHeadPostion.y && distances.down > yDifference) {
+                        distances.down = yDifference;
+                    }
+                }
+            }
+        });
+
+        return distances;
+
     }
 
     getStatisticsArray() {
         let stats = this.getStatistics();
         return [
-            stats.wallDistances.right, stats.wallDistances.left, stats.wallDistances.up, stats.wallDistances.down,
-            stats.bodyDistances.right, stats.bodyDistances.left, stats.bodyDistances.up, stats.bodyDistances.down,
+            stats.collisionDistance.right, stats.collisionDistance.left, stats.collisionDistance.up, stats.collisionDistance.down,
             stats.foodDistances.right, stats.foodDistances.left, stats.foodDistances.up, stats.foodDistances.down,
         ]
     }
 
-    getDistancesToWall(){
-        return {
-            right: this.game.grid.size.x - this.game.getSnake().head.position.x - 2,
-            left: this.game.getSnake().head.position.x - 1,
-            up: this.game.getSnake().head.position.y - 1,
-            down: this.game.grid.size.y - this.game.getSnake().head.position.y - 2
-        };
-    }
-
-    getDistancesToBody(){
-        let nextBodyUp = null;
-        let nextBodyDown = null;
-        let nextBodyRight = null;
-        let nextBodyLeft = null;
-
-        this.game.grid.eachInColumn(this.game.getSnake().head.position.x, (item) => {
-            if (item.getPositionInGrid().y < this.game.getSnake().head.position.y) {
-                if(item.hasState("body")){
-                    nextBodyUp = item.getPositionInGrid().y;
-                }
-            }else{
-                if(item.hasState("body") && nextBodyDown === null){
-                    nextBodyDown = item.getPositionInGrid().y;
-                }
-            }
-        });
-
-        this.game.grid.eachInRow(this.game.getSnake().head.position.y, (item) => {
-            if (item.getPositionInGrid().x < this.game.getSnake().head.position.x) {
-                if(item.hasState("body")){
-                    nextBodyLeft = item.getPositionInGrid().x;
-                }
-            }else{
-                if(item.hasState("body") && nextBodyRight === null){
-                    nextBodyRight = item.getPositionInGrid().x;
-                }
-            }
-        });
-        return {
-            right: (typeof nextBodyRight === 'number') ? nextBodyRight - this.game.getSnake().head.position.x : 0,
-            left: (typeof nextBodyLeft === 'number') ? this.game.getSnake().head.position.x - nextBodyLeft : 0,
-            up: (typeof nextBodyUp === 'number') ? this.game.getSnake().head.position.y - nextBodyUp : 0,
-            down: (typeof nextBodyDown === 'number') ? nextBodyDown - this.game.getSnake().head.position.y : 0
-        };
-    }
 
     getDistancesToFood(){
         let distances = {

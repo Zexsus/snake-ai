@@ -1,11 +1,11 @@
 const Vector2D = require('../Engine/Vector2D.js');
 const clone = require('lodash.clonedeep');
 
-class Matrix{
-
-    /**
-     * @param {Vector2D} size
-     */
+/**
+ * Matrix object
+ * @param {Vector2D} size
+ */
+class Matrix {
     constructor(size){
         this.size = size;
         this.rows = size.y;

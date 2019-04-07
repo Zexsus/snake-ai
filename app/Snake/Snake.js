@@ -127,10 +127,32 @@ class Snake {
     }
 
     getDirectionByIndex(index) {
-        if (index === 0) return directions.right;
-        if (index === 1) return directions.left;
-        if (index === 2) return directions.up;
-        if (index === 3) return directions.down;
+        if (this.direction === directions.right) {
+            if (index === 0) return directions.up;
+            if (index === 1) return directions.right;
+            if (index === 2) return directions.down;
+        }
+
+        if (this.direction === directions.up) {
+            if (index === 0) return directions.left;
+            if (index === 1) return directions.up;
+            if (index === 2) return directions.right;
+        }
+
+
+        if (this.direction === directions.left) {
+            if (index === 0) return directions.down;
+            if (index === 1) return directions.left;
+            if (index === 2) return directions.up;
+        }
+
+        if (this.direction === directions.down) {
+            if (index === 0) return directions.right;
+            if (index === 1) return directions.down;
+            if (index === 2) return directions.left;
+        }
+
+        return directions.right;
     }
 }
 

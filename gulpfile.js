@@ -3,6 +3,8 @@ const browserSync = require('browser-sync').create();
 const babelify = require('babelify');
 const browserify = require('browserify');
 const source = require('vinyl-source-stream');
+const gulpDocumentation = require('gulp-documentation');
+
 
 
 // Static server
@@ -28,6 +30,15 @@ gulp.task('scripts', function() {
         .on('error', swallowError)
             .pipe(source('app.js'))
         .pipe(gulp.dest('./dist'))
+});
+
+gulp.task('documentation-html-options', function () {
+    return gulp.src('./app/**/*.js')
+        .pipe(gulpDocumentation('html', {}, {
+            name: 'My Project',
+            version: '1.0.0'
+        }))
+        .pipe(gulp.dest('html-documentation'));
 });
 
 gulp.task("default", ['browser-sync', 'watch', 'scripts']);

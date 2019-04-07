@@ -12,20 +12,20 @@ module.exports = {
         // console.log(this.population.generation.getFitnessSum());
         return (
             this.population.generation.getBestSnake().bodySize < 6)
-            && !(this.population.generation.number > 500
+            && !(this.population.generation.number > 1
             );
     },
     neuralNetConfig: {
         layers: [
             {name: 'input', size: 12},
             {name: 'hiddenFirst', size: 12},
-            {name: 'hiddenSecond', size: 12},
-            {name: 'output', size: 4},
+            // {name: 'hiddenSecond', size: 12},
+            {name: 'output', size: 3},
         ],
         weights: [
             {'from': 'input', to: 'hiddenFirst'},
-            {'from': 'hiddenFirst', to: 'hiddenSecond'},
-            {'from': 'hiddenSecond', to: 'output'},
+            // {'from': 'hiddenFirst', to: 'hiddenSecond'},
+            {'from': 'hiddenFirst', to: 'output'},
         ],
         bias: 0,
     },

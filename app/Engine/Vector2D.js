@@ -1,9 +1,9 @@
-class Vector2D{
-
-    /**
-     * @param {number} x
-     * @param {number} y
-     */
+/**
+ * Simple object to provide x,y logic
+ * @param {number} x
+ * @param {number} y
+ */
+class Vector2D {
     constructor(x, y){
         this.x = x;
         this.y = y;

@@ -34,4 +34,29 @@ describe('Snake', function(){
         let clone = snake.clone();
         expect(snake.brain).to.be.eql(clone.brain);
     });
+
+    it('Choose direction correctly', () => {
+        snake.setDirection(directions.right);
+        expect(snake.getDirectionByIndex(0)).to.be.eql(directions.up);
+        expect(snake.getDirectionByIndex(1)).to.be.eql(directions.right);
+        expect(snake.getDirectionByIndex(2)).to.be.eql(directions.down);
+
+
+        snake.setDirection(directions.up);
+        expect(snake.getDirectionByIndex(0)).to.be.eql(directions.left);
+        expect(snake.getDirectionByIndex(1)).to.be.eql(directions.up);
+        expect(snake.getDirectionByIndex(2)).to.be.eql(directions.right);
+
+
+        snake.setDirection(directions.left);
+        expect(snake.getDirectionByIndex(0)).to.be.eql(directions.down);
+        expect(snake.getDirectionByIndex(1)).to.be.eql(directions.left);
+        expect(snake.getDirectionByIndex(2)).to.be.eql(directions.up);
+
+
+        snake.setDirection(directions.down);
+        expect(snake.getDirectionByIndex(0)).to.be.eql(directions.right);
+        expect(snake.getDirectionByIndex(1)).to.be.eql(directions.down);
+        expect(snake.getDirectionByIndex(2)).to.be.eql(directions.left);
+    });
 });

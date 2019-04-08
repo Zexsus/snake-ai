@@ -17,7 +17,10 @@ class Snake {
     }
 
     setDefaults(){
-        this.direction = null;
+        /**
+         * @type {Direction}
+         */
+        this.direction = directions.right;
         this.head = new BodyPart({
             x: 0,
             y: 0
@@ -127,32 +130,9 @@ class Snake {
     }
 
     getDirectionByIndex(index) {
-        if (this.direction === directions.right) {
-            if (index === 0) return directions.up;
-            if (index === 1) return directions.right;
-            if (index === 2) return directions.down;
-        }
-
-        if (this.direction === directions.up) {
-            if (index === 0) return directions.left;
-            if (index === 1) return directions.up;
-            if (index === 2) return directions.right;
-        }
-
-
-        if (this.direction === directions.left) {
-            if (index === 0) return directions.down;
-            if (index === 1) return directions.left;
-            if (index === 2) return directions.up;
-        }
-
-        if (this.direction === directions.down) {
-            if (index === 0) return directions.right;
-            if (index === 1) return directions.down;
-            if (index === 2) return directions.left;
-        }
-
-        return directions.right;
+        if (index === 0) return directions.getByIndex(this.direction.index - 1);
+        if (index === 1) return this.direction;
+        else return directions.getByIndex(this.direction.index + 1);
     }
 }
 

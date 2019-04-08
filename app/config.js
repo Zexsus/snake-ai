@@ -12,12 +12,12 @@ module.exports = {
         // console.log(this.population.generation.getFitnessSum());
         return (
             this.population.generation.getBestSnake().bodySize < 6)
-            && !(this.population.generation.number > 1
+            && !(this.population.generation.number > 100
             );
     },
     neuralNetConfig: {
         layers: [
-            {name: 'input', size: 12},
+            {name: 'input', size: 7},
             {name: 'hiddenFirst', size: 12},
             // {name: 'hiddenSecond', size: 12},
             {name: 'output', size: 3},

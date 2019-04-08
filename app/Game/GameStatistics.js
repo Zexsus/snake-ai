@@ -18,9 +18,9 @@ class GameStatistics{
     getCollisionDistance() {
         let distances = {
             up: 100,
-            left: 100,
-            down: 100,
             right: 100,
+            down: 100,
+            left: 100,
         };
         this.game.grid.each((item) => {
             let position = item.getPositionInGrid();
@@ -48,16 +48,28 @@ class GameStatistics{
             }
         });
 
-        return distances;
+        return [distances.up, distances.right, distances.down, distances.left];
 
     }
 
-    getStatisticsArray() {
+    getStatisticsArray(snakeDirection) {
         let stats = this.getStatistics();
+
         return [
-            stats.collisionDistance.right, stats.collisionDistance.left, stats.collisionDistance.up, stats.collisionDistance.down,
+            ...this.getStatsDistancesByDirection(snakeDirection, stats.collisionDistance),
             stats.foodDistances.right, stats.foodDistances.left, stats.foodDistances.up, stats.foodDistances.down,
         ]
+    }
+
+    /**
+     * @param {Direction} direction
+     */
+    getStatsDistancesByDirection(direction, stats) {
+        let prevKey = (direction.index < 0) ? direction.index : 3;
+        let nextKey = (direction.index > 3) ? direction.index : 0;
+        return [
+            stats[prevKey], stats[direction.index], stats[nextKey]
+        ];
     }
 
 

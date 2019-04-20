@@ -1,13 +1,13 @@
 var jsdom = require('jsdom');
 const {JSDOM} = jsdom;
-const GameObjectState = require('../../app/Engine/GameObjectState.js');
+const gameObjectStates = require('../../app/Engine/GameObjectStates.js');
 const Engine = require('../../app/Engine/Engine.js');
 
 
 let dom = new JSDOM(`<!DOCTYPE html>`);
 let engine = new Engine({
     document: dom.window.document,
-    states: PrepareStates(),
+    states: gameObjectStates,
     canvasSettings: {
         width: 400,
         height: 400,
@@ -16,15 +16,5 @@ let engine = new Engine({
         }
     }
 });
-
-
-function PrepareStates() {
-    return [
-        new GameObjectState('default', '#00FFFF'),
-        new GameObjectState('wall', '#003b62'),
-        new GameObjectState('body', '#00a842'),
-        new GameObjectState('head', '#d75600'),
-    ]
-}
 
 module.exports = engine;

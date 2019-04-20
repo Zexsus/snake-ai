@@ -12,7 +12,7 @@ module.exports = {
         // console.log(this.population.generation.getFitnessSum());
         return (
             this.population.generation.getBestSnake().bodySize < 6)
-            && !(this.population.generation.number > 100
+            && !(this.population.generation.number > 1
             );
     },
     neuralNetConfig: {

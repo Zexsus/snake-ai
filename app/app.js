@@ -1,6 +1,6 @@
 const Game = require('./Game/Game.js');
 const directions = require('./Game/Directions.js');
-const GameStatistics = require('./Game/GameStatistics.js');
+const GameState = require('./Statistics/GameState.js');
 const StatsDisplayer = require('./Game/StatsDisplayer.js');
 const Chart = require('./Statistics/Chart.js');
 
@@ -11,7 +11,7 @@ let chart = new Chart({
     population: game.population,
 });
 game.start();
-let gameStats = new GameStatistics(game);
+let gameStats = new GameState(game);
 let statsDisplayer = new StatsDisplayer(gameStats, document);
 initUserInput(game);
 

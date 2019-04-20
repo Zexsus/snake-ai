@@ -16,7 +16,6 @@ describe("Grid", function () {
         lastItem = grid.getItem(new Vector2D(9, 9));
     });
 
-
     it('Create items of rectangles', function () {
         expect(grid.getItems().length).to.be.equal(10);
     });
@@ -233,6 +232,53 @@ describe("Grid", function () {
             grid.eachInColumn(9, function(item){
                 expect(item.state).to.be.eql(engine.getState('wall'));
             });
+        });
+    });
+
+    describe('States from array', function () {
+        beforeEach(() => {
+        });
+
+        it('Set all items', function () {
+            grid = new Grid(engine, new Vector2D(0, 0), new Vector2D(4, 4));
+            let gridState = [
+                'W', 'W', 'W', 'W',
+                'W', 'W', 'W', 'W',
+                'W', 'W', 'W', 'W',
+                'W', 'W', 'W', 'W',
+            ];
+            grid.setupGridStatesByArray(gridState);
+
+            grid.each((item) => {
+                expect(item.getState()).to.be.eql(engine.getState('wall'));
+            });
+        });
+
+        it('Sets proper items', () => {
+            grid = new Grid(engine, new Vector2D(0, 0), new Vector2D(4, 4));
+            let gridState = [
+                '0', '0', '0', '0',
+                '0', 'H', 'W', '0',
+                '0', 'B', '0', '0',
+                '0', '0', '0', 'F',
+            ];
+            grid.setupGridStatesByArray(gridState);
+            expect(grid.getItem({
+                x: 1, y: 1
+            }).getState()).to.be.eql(engine.getState('head'));
+
+            expect(grid.getItem({
+                x: 1, y: 2
+            }).getState()).to.be.eql(engine.getState('body'));
+
+            expect(grid.getItem({
+                x: 2, y: 1
+            }).getState()).to.be.eql(engine.getState('wall'));
+
+            expect(grid.getItem({
+                x: 3, y: 3
+            }).getState()).to.be.eql(engine.getState('food'));
+
         });
     });
 });

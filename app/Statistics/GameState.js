@@ -1,4 +1,4 @@
-class GameStatistics{
+class GameState {
 
     /**
      * @param {Game} game
@@ -72,7 +72,6 @@ class GameStatistics{
         ];
     }
 
-
     getDistancesToFood(){
         let distances = {
             right: this.game.foodItem.getPositionInGrid().x - this.game.getSnake().head.position.x,
@@ -93,4 +92,4 @@ class GameStatistics{
 
 }
 
-module.exports = GameStatistics;
+module.exports = GameState;

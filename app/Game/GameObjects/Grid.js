@@ -250,6 +250,43 @@ class Grid extends GameObject {
         let height = (this.itemsSize.y + this.itemsOffset) * this.rowsCount - this.itemsOffset;
         return new Vector2D(width, height);
     }
+
+    /**
+     * Sets grid state by special array with signs
+     * function for test purposesr
+     */
+    setupGridStatesByArray(array) {
+        if (array.length !== this.size.x * this.size.y) {
+            throw "Array of values not match size of grid";
+        }
+        this.each((item) => {
+            let char = array[item.getPositionInGrid().x + (item.getPositionInGrid().y * this.size.x)];
+            let state = this.getStateBySign(char);
+            item.setState(state);
+        });
+    }
+
+    getStateBySign(sign) {
+        if (sign === "W") {
+            return this.engine.getState('wall');
+        }
+
+        if (sign === "B") {
+            return this.engine.getState('body');
+        }
+
+        if (sign === "H") {
+            return this.engine.getState('head');
+        }
+
+        if (sign === "F") {
+            return this.engine.getState('food');
+        }
+
+        if (sign === "0") {
+            return this.engine.getState('default');
+        }
+    }
 }
 
 module.exports = Grid;

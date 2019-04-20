@@ -1,4 +1,4 @@
-const GameObjectState = require("../Engine/GameObjectState.js");
+const gameObjectStates = require("../Engine/GameObjectStates.js");
 const Engine = require("../Engine/Engine.js");
 const Grid = require("./GameObjects/Grid.js");
 const Vector2D = require("../Engine/Vector2D.js");
@@ -6,7 +6,7 @@ const gameConfig = require('./game-config.json');
 const config = require('../config.js');
 const GridSnakeInterface = require('../Snake/GridSnakeInterface.js');
 const Population = require('../Brain/Population.js');
-const GameStatistics = require('./GameStatistics.js');
+const GameState = require('../Statistics/GameState.js');
 
 
 class Game {
@@ -17,7 +17,7 @@ class Game {
     constructor(document){
         this.isRunning = false;
         this.document = document;
-        this.gameStats = new GameStatistics(this);
+        this.gameStats = new GameState(this);
         this.foodItem = null;
         this.movesWithoutGrow = 0;
         if (!this.gameAwaken) this.awake();
@@ -40,13 +40,7 @@ class Game {
             document: this.document,
             containerSelector: 'engine',
             fps: 60,
-            states: [
-                new GameObjectState('default', '#a4f2ff'),
-                new GameObjectState('wall', '#003b62'),
-                new GameObjectState('food', '#fffa00'),
-                new GameObjectState('body', '#00a842'),
-                new GameObjectState('head', '#d75600'),
-            ],
+            states: gameObjectStates,
             canvasSettings: {
                 width: gameConfig.canvas.width,
                 height: gameConfig.canvas.height,
@@ -163,25 +157,14 @@ class Game {
 
     handleCollisions(){
         let item = this.grid.getItem(this.getSnake().head.position);
-        if(item.hasState('wall')){
-            this.onWallCollision();
-        }
 
-        if(item.hasState('body')){
-            this.onBodyCollision();
+        if (item.getState().isCollidable()) {
+            this.snakeDie()
         }
 
         if(item.hasState('food')){
             this.onFoodCollision();
         }
-    }
-
-    onBodyCollision(){
-        this.snakeDie();
-    }
-
-    onWallCollision(){
-        this.snakeDie();
     }
 
     onFoodCollision(){

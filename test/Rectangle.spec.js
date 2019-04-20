@@ -22,7 +22,7 @@ describe("Rectangle", function () {
         rectangle.draw();
         var pixelData = rectangle.ctx.getImageData(1, 11, 1, 1);
 
-        expect(pixelData.data.toString()).to.be.equal('0,255,255,255');
+        expect(pixelData.data.toString()).to.be.equal('164,242,255,255');
     });
 
     it('Have proper position after move', function () {

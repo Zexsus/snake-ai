@@ -1,11 +1,11 @@
 class StatsDisplayer{
 
     /**
-     * @param {GameStatistics} gameStatistics
+     * @param {GameState} GameState
      * @param {Document} document
      */
-    constructor(gameStatistics, document){
-        this.gameStats = gameStatistics;
+    constructor(GameState, document) {
+        this.gameStats = GameState;
         this.document = document;
     }
 

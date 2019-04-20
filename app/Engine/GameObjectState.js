@@ -1,7 +1,8 @@
 class GameObjectState {
-    constructor(name, color) {
+    constructor(name, color, collidable) {
         this.name = name;
         this.color = color;
+        this.collidable = collidable;
     }
 
     getName() {
@@ -10,6 +11,10 @@ class GameObjectState {
 
     getColor() {
         return this.color;
+    }
+
+    isCollidable() {
+        return this.collidable;
     }
 
 }

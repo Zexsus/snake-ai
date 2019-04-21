@@ -1,7 +1,7 @@
 var expect = require("chai").expect;
-var directions = require('../app/Game/Directions');
+var directions = require('../../app/Game/Directions');
 
-var BodyPart = require('../app/Snake/BodyPart');
+var BodyPart = require('../../app/Snake/BodyPart');
 
 describe('BodyPart', function () {
 

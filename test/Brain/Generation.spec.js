@@ -1,6 +1,6 @@
 var expect = require("chai").expect;
-const Generation = require('../app/Brain/Generation.js');
-const Snake = require("../app/Snake/Snake.js");
+const Generation = require('../../app/Brain/Generation.js');
+const Snake = require("../../app/Snake/Snake.js");
 let generation = null;
 
 describe('Generation', function () {

@@ -1,6 +1,6 @@
 var expect = require("chai").expect;
-const Vector2D = require('../app/Engine/Vector2D.js');
-const Matrix = require('../app/Brain/Matrix.js');
+const Vector2D = require('../../app/Engine/Vector2D.js');
+const Matrix = require('../../app/Brain/Matrix.js');
 
 standardMatrixSize = new Vector2D(10, 10);
 

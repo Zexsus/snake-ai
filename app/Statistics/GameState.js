@@ -11,11 +11,16 @@ class GameState {
         this.collisionDistance = new CollisionDistance();
     }
 
-    getStatistics(){
-        return {
+    getStatisticsArray(snakeDirection) {
+        let stats = {
             collisionDistance: this.getCollisionDistance(),
             foodDistances: this.getDistancesToFood(),
         };
+
+        return [
+            ...GameState.getStatsDistancesByDirection(snakeDirection, stats.collisionDistance),
+            ...GameState.getStatsDistancesByDirection(snakeDirection, stats.foodDistances),
+        ]
     }
 
     getCollisionDistance() {
@@ -24,30 +29,27 @@ class GameState {
         return [distances.up, distances.right, distances.down, distances.left];
     }
 
-    getStatisticsArray(snakeDirection) {
-        let stats = this.getStatistics();
-
-        return [
-            ...this.getStatsDistancesByDirection(snakeDirection, stats.collisionDistance),
-            ...this.getStatsDistancesByDirection(snakeDirection, stats.foodDistances),
-        ]
+    getDistancesToFood() {
+        let distances = FoodDistance.get(this.game.foodItem.getPositionInGrid(), this.game.getSnake().head.position);
+        return [distances.up, distances.right, distances.down, distances.left];
     }
 
     /**
      * @param {Direction} direction
+     * @param {Array<number>} stats
      */
-    getStatsDistancesByDirection(direction, stats) {
-        let prevKey = (direction.index < 0) ? direction.index : 3;
-        let nextKey = (direction.index > 3) ? direction.index : 0;
+    static getStatsDistancesByDirection(direction, stats) {
+
+        let prevKey = direction.index - 1;
+        if (prevKey < 0) prevKey = 3;
+
+        let nextKey = direction.index + 1;
+        if (nextKey > 3) nextKey = 0;
+
         return [
             stats[prevKey], stats[direction.index], stats[nextKey]
         ];
     }
-
-    getDistancesToFood(){
-        return FoodDistance.get(this.game.foodItem.getPositionInGrid(), this.game.getSnake().head.position);
-    }
-
 }
 
 module.exports = GameState;

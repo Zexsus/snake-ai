@@ -1,8 +1,8 @@
 var expect = require("chai").expect;
-const engine = require('./mock/mock-engine.js');
-const CollisionDistance = require("../app/Statistics/CollisionDistance.js");
-const Grid = require("../app/Game/GameObjects/Grid.js");
-const Vector2D = require("../app/Engine/Vector2D.js");
+const engine = require('../mock/mock-engine.js');
+const CollisionDistance = require("../../app/Statistics/CollisionDistance.js");
+const Grid = require("../../app/Game/GameObjects/Grid.js");
+const Vector2D = require("../../app/Engine/Vector2D.js");
 
 
 before(() => {

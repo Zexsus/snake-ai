@@ -1,5 +1,5 @@
 var expect = require("chai").expect;
-const FoodDistance = require("../app/Statistics/FoodDistance.js");
+const FoodDistance = require("../../app/Statistics/FoodDistance.js");
 
 describe('Food distance distance', () => {
     before(() => {

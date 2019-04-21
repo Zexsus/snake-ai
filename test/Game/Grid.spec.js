@@ -1,8 +1,8 @@
 var expect = require("chai").expect;
-let engine = require('./mock/mock-engine.js');
-const Grid = require('../app/Game/GameObjects/Grid.js');
-const Vector2D = require('../app/Engine/Vector2D.js');
-const config = require('../app/Game/game-config.json');
+let engine = require('../mock/mock-engine.js');
+const Grid = require('../../app/Game/GameObjects/Grid.js');
+const Vector2D = require('../../app/Engine/Vector2D.js');
+const config = require('../../app/Game/game-config.json');
 
 let grid = null;
 

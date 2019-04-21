@@ -1,6 +1,6 @@
 var expect = require("chai").expect;
-const Matrix = require('../app/Brain/Matrix.js');
-const NeuralNet = require('../app/Brain/NeuralNet.js');
+const Matrix = require('../../app/Brain/Matrix.js');
+const NeuralNet = require('../../app/Brain/NeuralNet.js');
 
 let neuralNet = null;
 

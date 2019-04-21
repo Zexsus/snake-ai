@@ -1,7 +1,7 @@
 var expect = require("chai").expect;
-let engine = require('./mock/mock-engine.js');
-const Rectangle = require('../app/Game/GameObjects/Rectangle.js');
-const Vector2D = require('../app/Engine/Vector2D.js');
+let engine = require('../mock/mock-engine.js');
+const Rectangle = require('../../app/Game/GameObjects/Rectangle.js');
+const Vector2D = require('../../app/Engine/Vector2D.js');
 
 describe("Engine", function () {
     it('Create canvas with properties', function () {

@@ -1,3 +1,6 @@
+const CollisionDistance = require("./CollisionDistance.js");
+const FoodDistance = require("./FoodDistance.js");
+
 class GameState {
 
     /**
@@ -5,51 +8,20 @@ class GameState {
      */
     constructor(game){
         this.game = game;
+        this.collisionDistance = new CollisionDistance();
     }
 
     getStatistics(){
         return {
-            direction: this.game.getSnake().direction,
             collisionDistance: this.getCollisionDistance(),
             foodDistances: this.getDistancesToFood(),
         };
     }
 
     getCollisionDistance() {
-        let distances = {
-            up: 100,
-            right: 100,
-            down: 100,
-            left: 100,
-        };
-        this.game.grid.each((item) => {
-            let position = item.getPositionInGrid();
-            let snakeHeadPostion = this.game.getSnake().head.position;
-            let isCollider = item.hasState('wall') || item.hasState('body');
-            let xDifference = Math.abs(position.x - snakeHeadPostion.x);
-            let yDifference = Math.abs(position.y - snakeHeadPostion.y);
-            if (isCollider) {
-                if (position.y === snakeHeadPostion.y) {
-                    if (position.x < snakeHeadPostion.x && distances.left > xDifference) {
-                        distances.left = xDifference;
-                    }
-                    if (position.x > snakeHeadPostion.x && distances.right > xDifference) {
-                        distances.right = xDifference;
-                    }
-                }
-                if (position.x === snakeHeadPostion.x) {
-                    if (position.y < snakeHeadPostion.y && distances.up > yDifference) {
-                        distances.up = yDifference;
-                    }
-                    if (position.y > snakeHeadPostion.y && distances.down > yDifference) {
-                        distances.down = yDifference;
-                    }
-                }
-            }
-        });
-
+        this.collisionDistance.initStartDistances();
+        let distances = this.collisionDistance.get(this.game.getSnake().position, this.game.grid);
         return [distances.up, distances.right, distances.down, distances.left];
-
     }
 
     getStatisticsArray(snakeDirection) {
@@ -57,7 +29,7 @@ class GameState {
 
         return [
             ...this.getStatsDistancesByDirection(snakeDirection, stats.collisionDistance),
-            stats.foodDistances.right, stats.foodDistances.left, stats.foodDistances.up, stats.foodDistances.down,
+            ...this.getStatsDistancesByDirection(snakeDirection, stats.foodDistances),
         ]
     }
 
@@ -73,21 +45,7 @@ class GameState {
     }
 
     getDistancesToFood(){
-        let distances = {
-            right: this.game.foodItem.getPositionInGrid().x - this.game.getSnake().head.position.x,
-            left: this.game.getSnake().head.position.x - this.game.foodItem.getPositionInGrid().x,
-            up: this.game.getSnake().head.position.y - this.game.foodItem.getPositionInGrid().y,
-            down: this.game.foodItem.getPositionInGrid().y - this.game.getSnake().head.position.y,
-        };
-        if (distances.right < 0) {
-            distances.right = 0;
-        }
-        for (let key in distances) {
-            if (distances[key] < 0) {
-                distances[key] = 0;
-            }
-        }
-        return distances;
+        return FoodDistance.get(this.game.foodItem.getPositionInGrid(), this.game.getSnake().head.position);
     }
 
 }

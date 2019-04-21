@@ -50,7 +50,7 @@ describe('Collision distance', () => {
             expect(distances.up).to.be.equal(4);
         });
 
-        it('Bottom distance', () => {
+        it('Down distance', () => {
             expect(distances.down).to.be.equal(5);
         });
     });
@@ -89,7 +89,7 @@ describe('Collision distance', () => {
             expect(distances.up).to.be.equal(2);
         });
 
-        it('Bottom distance', () => {
+        it('Down distance', () => {
             expect(distances.down).to.be.equal(1);
         });
     });

@@ -7,6 +7,7 @@ const config = require('../config.js');
 const GridSnakeInterface = require('../Snake/GridSnakeInterface.js');
 const Population = require('../Brain/Population.js');
 const GameState = require('../Statistics/GameState.js');
+const FoodGenerator = require('./FoodGenerator.js');
 
 
 class Game {
@@ -27,6 +28,7 @@ class Game {
     awake(){
         this.setupEngine();
         this.setupGrid();
+        this.setupFoodGenerator();
         this.generateFood();
         this.initPopulation();
 
@@ -61,6 +63,11 @@ class Game {
         this.grid.draw();
     }
 
+    setupFoodGenerator() {
+        this.foodGenerator = new FoodGenerator(this.engine.getState('food'));
+        this.foodGenerator.setGrid(this.grid);
+    }
+
     baseTraining() {
         while (this.isStillTraining()) {
             this.trainingUpdate()
@@ -73,7 +80,7 @@ class Game {
 
     start(){
         this.isRunning = true;
-        this.baseTraining();
+        // this.baseTraining();
         this.onBaseLearningEnd();
         this.engine.update(() => {
             if(this.isRunning)
@@ -101,6 +108,7 @@ class Game {
 
     restartGame() {
         this.grid.resetStatesWithout(['wall']);
+        this.foodGenerator.foodCount = 0;
         this.generateFood();
         this.grid.clear();
         this.grid.draw();
@@ -135,9 +143,7 @@ class Game {
 
     generateFood(){
         this.grid.resetStatesWithout(['wall']);
-        let randomItem = this.grid.getRandomItemWithout(['wall', 'head', 'body', 'food']);
-        randomItem.setState(this.engine.getState('food'));
-        this.foodItem = randomItem;
+        this.foodItem = this.foodGenerator.getFoodItem();
     }
 
     /**

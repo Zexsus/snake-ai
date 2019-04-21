@@ -17,9 +17,8 @@ module.exports = {
     },
     neuralNetConfig: {
         layers: [
-            {name: 'input', size: 7},
-            {name: 'hiddenFirst', size: 12},
-            // {name: 'hiddenSecond', size: 12},
+            {name: 'input', size: 6},
+            {name: 'hiddenFirst', size: 8},
             {name: 'output', size: 3},
         ],
         weights: [

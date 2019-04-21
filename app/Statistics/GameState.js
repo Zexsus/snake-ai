@@ -12,20 +12,15 @@ class GameState {
     }
 
     getStatisticsArray(snakeDirection) {
-        let stats = {
-            collisionDistance: this.getCollisionDistance(),
-            foodDistances: this.getDistancesToFood(),
-        };
-
         return [
-            ...GameState.getStatsDistancesByDirection(snakeDirection, stats.collisionDistance),
-            ...GameState.getStatsDistancesByDirection(snakeDirection, stats.foodDistances),
+            ...GameState.getStatsDistancesByDirection(snakeDirection, this.getCollisionDistance()),
+            ...GameState.getStatsDistancesByDirection(snakeDirection, this.getDistancesToFood()),
         ]
     }
 
     getCollisionDistance() {
         this.collisionDistance.initStartDistances();
-        let distances = this.collisionDistance.get(this.game.getSnake().position, this.game.grid);
+        let distances = this.collisionDistance.get(this.game.getSnake().head.position, this.game.grid);
         return [distances.up, distances.right, distances.down, distances.left];
     }
 

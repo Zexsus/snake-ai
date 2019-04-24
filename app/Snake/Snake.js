@@ -1,7 +1,10 @@
 const BodyPart = require('./BodyPart.js');
 const NeuralNet = require('../Brain/NeuralNet.js');
+const Vector2D = require('../Engine/Vector2D.js');
 const directions = require('../Game/Directions.js');
 const config = require('../config.js');
+const clone = require('lodash.clonedeep');
+
 
 class Snake {
     constructor(id) {
@@ -14,6 +17,7 @@ class Snake {
         this.alive = true;
         this.brain = new NeuralNet(config.neuralNetConfig);
         this.calcFitness = config.calcFitness;
+        this.diePosition = null;
     }
 
     setDefaults(){
@@ -65,7 +69,12 @@ class Snake {
         return this;
     }
 
-    die() {
+    /**
+     * @param {Vector2D} foodPosition
+     */
+    die(foodPosition) {
+        this.diePosition = new Vector2D(this.head.position.x, this.head.position.y);
+        this.foodPositionWhenDie = clone(foodPosition);
         this.alive = false;
     }
 

@@ -12,7 +12,7 @@ class NeuralNet {
     constructor(args) {
         this.layers = args.layers;
         this.bias = args.bias;
-        this.weights = args.weights;
+        this.weights = clone(args.weights);
         if (args.weights.length > 0 && typeof args.weights[0].matrix === "undefined") {
             this.setupWeightsMatrixes();
             this.randomizeWeights();

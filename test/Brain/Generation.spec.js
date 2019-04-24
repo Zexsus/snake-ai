@@ -1,6 +1,7 @@
 var expect = require("chai").expect;
 const Generation = require('../../app/Brain/Generation.js');
 const Snake = require("../../app/Snake/Snake.js");
+const Vector2D = require("../../app/Engine/Vector2D.js");
 let generation = null;
 
 describe('Generation', function () {
@@ -15,6 +16,14 @@ describe('Generation', function () {
             expect(snake.head.position).to.be.eql({x: 16, y: 16});
             expect(snake.bodySize).to.be.equal(3);
         });
+    });
+
+    it('Create unique set of snakes', () => {
+        generation.foreachSnake((snake, index) => {
+            if (index !== 0) {
+                expect(snake.brain.weights).to.not.be.eql(generation.snakes[index - 1].brain.weights);
+            }
+        })
     });
 
     it('Iterates through all snakes', () => {
@@ -43,7 +52,6 @@ describe('Generation', function () {
     it('Returns best snake', () => {
         generation.foreachSnake((snake, index) => {
             snake.moves = index;
-            snake.calcFitness();
             snake.fitness = index;
         });
 
@@ -107,11 +115,4 @@ describe('Generation', function () {
             expect(snake.fitness).to.be.equal(90 - (10 * index));
         });
     });
-
-    it('Calc fitnesses', () => {
-        generation.calcFitnesses();
-        generation.foreachSnake(snake => {
-            expect(typeof snake.fitness).to.be.equal('number');
-        });
-    })
 });

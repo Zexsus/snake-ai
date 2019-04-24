@@ -22,8 +22,8 @@ class Population {
 
     endPopulation() {
         this.generation.calcFitnesses();
-        this.currentBestScore = this.generation.getBestSnake().moves,
-            this.onPopulationEnd(this);
+        this.currentBestScore = this.generation.getBestSnake().moves;
+        this.onPopulationEnd(this);
         this.fitnessSum = this.generation.getFitnessSum();
         if (this.generation.number % 10 === 0) {
             console.clear();

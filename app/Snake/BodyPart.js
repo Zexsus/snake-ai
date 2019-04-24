@@ -2,6 +2,9 @@ const clone = require('lodash.clonedeep');
 const Vector2D = require('../Engine/Vector2D.js');
 
 class BodyPart {
+    /**
+     * @param {Vector2D} position
+     */
     constructor(position = null) {
         this.position = position;
         this.next = null;

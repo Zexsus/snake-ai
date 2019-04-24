@@ -1,7 +1,9 @@
 module.exports = {
     // as Snake
     calcFitness: function () {
-        this.fitness = (this.moves) * (this.bodySize - 2) ** 2;
+        let foodDistanceWhenDead = this.diePosition.getDistanceTo(this.foodPositionWhenDie);
+        this.fitness = Math.floor((1 / foodDistanceWhenDead) * 30) + (this.bodySize - 3) * 30;
+        // console.log(this);
     },
     snakeMaxNoFoodMoves: 200,
     mutationRate: 0.2,
@@ -9,16 +11,13 @@ module.exports = {
     howManyBestSnakesStay: 0.3,
     // as Game
     trainingCondition: function () {
-        // console.log(this.population.generation.getFitnessSum());
-        return (
-            this.population.generation.getBestSnake().bodySize < 6)
-            && !(this.population.generation.number > 1
-            );
+        return (this.population.generation.getBestSnake().bodySize < 6)
+            && !(this.population.generation.number > 100);
     },
     neuralNetConfig: {
         layers: [
             {name: 'input', size: 6},
-            {name: 'hiddenFirst', size: 8},
+            {name: 'hiddenFirst', size: 6},
             {name: 'output', size: 3},
         ],
         weights: [

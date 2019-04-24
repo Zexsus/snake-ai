@@ -81,6 +81,10 @@ class Game {
                 x: 6,
                 y: 6,
             },
+            {
+                x: 16,
+                y: 16,
+            },
         ]);
     }
 
@@ -116,7 +120,7 @@ class Game {
     }
 
     snakeDie() {
-        this.getSnake().die();
+        this.getSnake().die(this.foodItem.getPositionInGrid());
         this.population.getNextSnake();
         this.isRunning = false;
         this.restartGame();

@@ -27,6 +27,14 @@ class Vector2D {
     isEqual(vector){
         return this.x === vector.x && this.y === vector.y;
     }
+
+    /**
+     * @param {Vector2D} vector
+     * @return {Number}
+     */
+    getDistanceTo(vector) {
+        return Math.pow(Math.pow(vector.x - this.x, 2) + Math.pow(vector.y - this.y, 2), 0.5);
+    }
 }
 
 module.exports = Vector2D;

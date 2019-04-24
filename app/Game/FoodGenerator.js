@@ -1,36 +1,23 @@
 class FoodGenerator {
-    constructor(foodState) {
+    /**
+     * @param {GameObjectState} foodState
+     * @param {Grid} grid
+     * @param {Array.<Vector2D>}startFoodPositions
+     */
+    constructor(foodState, grid, startFoodPositions) {
         this.foodState = foodState;
-        this.startFoodPositions = [
-            {
-                x: 26,
-                y: 6,
-            },
-            {
-                x: 26,
-                y: 26,
-            },
-            {
-                x: 6,
-                y: 26,
-            },
-            {
-                x: 6,
-                y: 6,
-            },
-        ];
-
-        this.foodCount = 0;
-    }
-
-    setGrid(grid) {
+        this.startFoodPositions = startFoodPositions;
         this.grid = grid;
+        this.foodGenerated = 0;
     }
 
-    getFoodItem() {
-        if (this.foodCount < this.startFoodPositions.length) {
-            this.foodItem = this.grid.getItem(this.startFoodPositions[this.foodCount]);
-            this.foodCount++;
+    /**
+     * @returns {GridItem}
+     */
+    getNewFoodItem() {
+        if (this.foodGenerated < this.startFoodPositions.length) {
+            this.foodItem = this.grid.getItem(this.startFoodPositions[this.foodGenerated]);
+            this.foodGenerated++;
         } else {
             this.foodItem = this.getRandomFoodItem();
         }
@@ -38,10 +25,17 @@ class FoodGenerator {
         return this.foodItem;
     }
 
+    /**
+     * @returns {GridItem}
+     */
     getRandomFoodItem() {
         let randomItem = this.grid.getRandomItemWithout(['wall', 'head', 'body', 'food']);
         randomItem.setState(this.foodState);
         return randomItem;
+    }
+
+    reset() {
+        this.foodGenerated = 0;
     }
 }
 

@@ -64,8 +64,24 @@ class Game {
     }
 
     setupFoodGenerator() {
-        this.foodGenerator = new FoodGenerator(this.engine.getState('food'));
-        this.foodGenerator.setGrid(this.grid);
+        this.foodGenerator = new FoodGenerator(this.engine.getState('food'), this.grid, [
+            {
+                x: 26,
+                y: 6,
+            },
+            {
+                x: 26,
+                y: 26,
+            },
+            {
+                x: 6,
+                y: 26,
+            },
+            {
+                x: 6,
+                y: 6,
+            },
+        ]);
     }
 
     baseTraining() {
@@ -108,7 +124,7 @@ class Game {
 
     restartGame() {
         this.grid.resetStatesWithout(['wall']);
-        this.foodGenerator.foodCount = 0;
+        this.foodGenerator.reset();
         this.generateFood();
         this.grid.clear();
         this.grid.draw();
@@ -143,7 +159,7 @@ class Game {
 
     generateFood(){
         this.grid.resetStatesWithout(['wall']);
-        this.foodItem = this.foodGenerator.getFoodItem();
+        this.foodItem = this.foodGenerator.getNewFoodItem();
     }
 
     /**

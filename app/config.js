@@ -6,18 +6,19 @@ module.exports = {
         // console.log(this);
     },
     snakeMaxNoFoodMoves: 200,
-    mutationRate: 0.2,
-    generationSize: 12,
-    howManyBestSnakesStay: 0.3,
+    mutationRate: 0.25,
+    generationSize: 10,
+    howManyBestSnakesStay: 0,
     // as Game
+    isBaseTraining: true,
     trainingCondition: function () {
         return (this.population.generation.getBestSnake().bodySize < 6)
-            && !(this.population.generation.number > 100);
+            && !(this.population.generation.number > 50);
     },
     neuralNetConfig: {
         layers: [
             {name: 'input', size: 6},
-            {name: 'hiddenFirst', size: 6},
+            {name: 'hiddenFirst', size: 4},
             {name: 'output', size: 3},
         ],
         weights: [

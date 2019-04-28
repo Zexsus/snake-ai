@@ -100,7 +100,9 @@ class Game {
 
     start(){
         this.isRunning = true;
-        // this.baseTraining();
+        if (config.isBaseTraining) {
+            this.baseTraining();
+        }
         this.onBaseLearningEnd();
         this.engine.update(() => {
             if(this.isRunning)

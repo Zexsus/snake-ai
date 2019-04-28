@@ -42,6 +42,7 @@ class Population {
         for (let i = 0; i < this.generation.size - this.generation.size * config.howManyBestSnakesStay; i++) {
             let parent1 = this.generation.getRandomSnake();
             let parent2 = this.generation.getRandomSnake();
+            // console.log("Chosen 2 snakes fitness", [parent1.fitness, parent2.fitness]);
             if (parent1.id === parent2.id) {
                 throw new Error('Two random snake in row are the same');
             }

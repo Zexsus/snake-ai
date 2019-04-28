@@ -94,6 +94,7 @@ class Generation {
 
     /**
      * Returns random snake, it cannot be the same snake twice in row
+     * @return {Snake}
      */
     getRandomSnake() {
         let snakes = clone(this.snakes);

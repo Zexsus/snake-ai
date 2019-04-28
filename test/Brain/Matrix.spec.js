@@ -164,6 +164,14 @@ describe("Matrix", function () {
         clone.foreach((value, matrix, position) => {
            expect(clone.get(position)).to.be.equal(smallMatrix.get(position));
         });
+
+        clone.set({
+            x: 2,
+            y: 2
+        }, 170);
+
+        expect(smallMatrix.get({x: 2, y: 2})).to.not.be.equal(170);
+        expect(clone.get({x: 2, y: 2})).to.be.equal(170);
     });
 
     it('Randomize', function(){

@@ -18,14 +18,14 @@ class Chart {
                 legend: {position: 'bottom'}
             };
             this.data = [
-                ['Generation', 'Fitness Sum', 'Best snake moves', 'Average fitness'],
+                ['Generation', 'Fitness Sum', 'Average fitness'],
             ];
             this.afterBaseLearning = false;
             this.population.onPopulationEnd = (population) => {
                 this.addData([
                     population.generation.number,
                     population.generation.getFitnessSum(),
-                    population.generation.getBestSnake().moves,
+                    // population.generation.getBestSnake().moves,
                     population.generation.getAverageFitness(),
                 ]);
                 if (this.afterBaseLearning) {

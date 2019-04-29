@@ -7,9 +7,10 @@ module.exports = {
     snakeMaxNoFoodMoves: 130,
     mutationRate: 0.2,
     generationSize: 16,
+    // percentage determiner of amount of snakes which won't be mutated or crossover to next generation
     howManyBestSnakesStay: 0,
-    // as Game
     isBaseTraining: false,
+    // as Game
     trainingCondition: function () {
         return (this.population.generation.getBestSnake().bodySize < 20)
             && !(this.population.generation.number > 50);

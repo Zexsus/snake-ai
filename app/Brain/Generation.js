@@ -97,7 +97,7 @@ class Generation {
      * @return {Snake}
      */
     getRandomSnake() {
-        let snakes = clone(this.snakes);
+        let snakes = this.getSnakesFitnesses();
         // If chosenSnakeBefore is set, remove it from array
         if (this.chosenSnakeBefore !== null) {
             for (let index = 0; index < snakes.length; index++) {
@@ -112,10 +112,12 @@ class Generation {
         let chosenSnake = null;
 
         snakes.forEach((snake, index) => {
-            runningSum += snake.fitness;
-            if (runningSum >= randomValue && chosenSnake === null) {
-                chosenSnake = snake;
-                this.chosenSnakeBefore = snake.id;
+            if (chosenSnake === null) {
+                runningSum += snake.fitness;
+                if (runningSum >= randomValue) {
+                    chosenSnake = clone(this.getSnakeById(snake.id));
+                    this.chosenSnakeBefore = snake.id;
+                }
             }
         });
 
@@ -135,6 +137,27 @@ class Generation {
 
     getAverageFitness() {
         return this.getFitnessSum() / this.size;
+    }
+
+    getSnakesFitnesses() {
+        const fitnesses = [];
+        this.snakes.forEach((snake, index) => {
+            fitnesses.push({
+                id: snake.id,
+                fitness: snake.fitness
+            });
+        });
+        return fitnesses;
+    }
+
+    getSnakeById(id) {
+        for (let index = 0; index < this.snakes.length; index++) {
+            let snake = this.snakes[index];
+            if (snake.id === id) {
+                return snake;
+            }
+        }
+        throw 'There is no snake with id: ' + id;
     }
 }
 

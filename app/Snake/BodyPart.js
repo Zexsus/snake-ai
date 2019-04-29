@@ -23,7 +23,9 @@ class BodyPart {
         if (this.next !== null) {
             this.next.setPosition(this.position);
         }
-        this.position = clone(position);
+        // this.position.x = position.x;
+        // this.position.y = position.y;
+        this.position = position;
     }
 
     recreate() {

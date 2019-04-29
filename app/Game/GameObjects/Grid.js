@@ -139,6 +139,7 @@ class Grid extends GameObject {
         });
 
         return this;
+        50
     }
 
     /**

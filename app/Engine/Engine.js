@@ -23,7 +23,7 @@ class Engine {
     }
 
     update(callback) {
-        this.loop.pushFunction(callback);
+        this.loop.on('update', callback);
     }
 
     getContext() {
@@ -40,7 +40,7 @@ class Engine {
         });
 
         if (statesWithName.length > 0) {
-            return clone(statesWithName[0]);
+            return statesWithName[0];
         } else {
             throw "There is no such state with name: " + name;
         }

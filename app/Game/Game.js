@@ -8,18 +8,22 @@ const GridSnakeInterface = require('../Snake/GridSnakeInterface.js');
 const Population = require('../Brain/Population.js');
 const GameState = require('../Statistics/GameState.js');
 const FoodGenerator = require('./FoodGenerator.js');
+const EventEmitter = require('eventemitter3');
 
 
-class Game {
+class Game extends EventEmitter {
 
     /**
      * @param {HTMLDocument} document
      */
     constructor(document){
+        super();
         this.isRunning = false;
         this.document = document;
         this.gameStats = new GameState(this);
         this.foodItem = null;
+        this.isBaseTraining = config.isBaseTraining;
+        this.fastLearning = false;
         this.movesWithoutGrow = 0;
         if (!this.gameAwaken) this.awake();
         this.isStillTraining = config.trainingCondition;
@@ -85,25 +89,40 @@ class Game {
                 x: 16,
                 y: 16,
             },
+            {
+                x: 26,
+                y: 26,
+            },
+            {
+                x: 6,
+                y: 6,
+            },
+            {
+                x: 26,
+                y: 6,
+            },
         ]);
     }
 
     baseTraining() {
+        this.fastLearning = true;
         while (this.isStillTraining()) {
             this.trainingUpdate()
         }
+        this.fastLearning = false;
     }
 
     trainingUpdate() {
         this.handleMotion();
+        this.resetScene();
     }
 
     start(){
         this.isRunning = true;
-        if (config.isBaseTraining) {
+        if (this.isBaseTraining) {
             this.baseTraining();
+            this.emit('onBaseLearningEnd', this);
         }
-        this.onBaseLearningEnd();
         this.engine.update(() => {
             if(this.isRunning)
                 this.update();
@@ -123,6 +142,7 @@ class Game {
 
     snakeDie() {
         this.getSnake().die(this.foodItem.getPositionInGrid());
+        this.emit("snakeDie", this.getSnake());
         this.population.getNextSnake();
         this.isRunning = false;
         this.restartGame();
@@ -132,14 +152,14 @@ class Game {
         this.grid.resetStatesWithout(['wall']);
         this.foodGenerator.reset();
         this.generateFood();
-        this.grid.clear();
-        this.grid.draw();
+        this.redrawScene();
         this.movesWithoutGrow = 0;
         this.isRunning = true;
     }
 
     update(){
         this.handleMotion();
+        this.resetScene();
         this.redrawScene();
     }
 
@@ -156,11 +176,16 @@ class Game {
     }
 
     redrawScene() {
+        if (!this.fastLearning) {
+            this.grid.clear();
+            this.grid.draw();
+        }
+    }
+
+    resetScene() {
         this.grid.resetStatesWithout(['wall', 'food']);
-        this.grid.clear();
         let snakeBodyArrayForGrid = this.getSnakeForGrid(this.getSnake());
         this.grid.setMultipleItemsState(snakeBodyArrayForGrid.reverse());
-        this.grid.draw();
     }
 
     generateFood(){
@@ -201,10 +226,17 @@ class Game {
         this.movesWithoutGrow = 0;
     }
 
-    onBaseLearningEnd() {
+    isStillTraining() {
     }
 
-    isStillTraining() {
+    skipGenerations(number) {
+        this.startGenerationNumber = this.population.generation.number;
+        this.fastLearning = true;
+        while (this.population.generation.number < this.startGenerationNumber + number && this.getSnake().bodySize < 40) {
+            this.trainingUpdate()
+        }
+        this.fastLearning = false;
+        this.emit('fastLearningEnd', this);
     }
 }
 

@@ -1,11 +1,13 @@
 const Generation = require("./Generation.js");
 const config = require("../config.js");
+var EventEmitter = require('eventemitter3');
 
-class Population {
+class Population extends EventEmitter {
     /**
      * @param {Number} size
      */
     constructor(size) {
+        super();
         this.mutationRate = config.mutationRate;
         this.generation = new Generation(config.generationSize);
         this.fitnessSum = 0;
@@ -23,7 +25,7 @@ class Population {
     endPopulation() {
         this.generation.calcFitnesses();
         this.currentBestScore = this.generation.getBestSnake().moves;
-        this.onPopulationEnd(this);
+        this.emit('populationEnd', this);
         this.fitnessSum = this.generation.getFitnessSum();
         if (this.generation.number % 10 === 0) {
             console.clear();

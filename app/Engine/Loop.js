@@ -1,5 +1,8 @@
-class Loop {
+var EventEmitter = require('eventemitter3');
+
+class Loop extends EventEmitter {
     constructor(params) {
+        super();
         this.fps = params.fps;
         this.updateFunctions = [];
         this.fpsInterval = null;
@@ -34,6 +37,7 @@ class Loop {
 
         if (this.elapsed > this.fpsInterval) {
             this.then = this.now - (this.elapsed % this.fpsInterval);
+            this.emit('update', this);
             this.updateFunctions.forEach(function (that) {
                 that();
             });

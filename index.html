@@ -16,9 +16,32 @@
         .column {
             flex: 1 1 auto;
         }
+
+        .button, input {
+          display: inline-block;
+          border: 2px solid #00aa1c;
+          color: #00aa1c;
+          border-radius: 5px;
+          padding: 10px 20px;
+          margin-bottom: 10px;
+          margin-right: 10px;
+          text-transform: uppercase;
+          text-decoration: none;
+          transition: all 0.2s;
+          cursor: pointer;
+
+        }
+
+        .button:hover {
+          background-color: #00aa1c;
+          color: white;
+        }
     </style>
 </head>
 <body>
+<a id="startButton" href="#" class="button"> Start </a>
+<a id="skipGenerations" href="#" class="button" title="">Skip generations</a> <input type="text" id="generationsToSkip"
+                                                                                     value="10">
 <div class="row">
     <div class="column" id="engine">
 
@@ -26,6 +49,10 @@
     <div class="column" id="chart">
 
     </div>
+</div>
+
+<div id="table-chart">
+
 </div>
 </body>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>

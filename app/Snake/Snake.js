@@ -76,6 +76,9 @@ class Snake {
         this.diePosition = new Vector2D(this.head.position.x, this.head.position.y);
         this.foodPositionWhenDie = clone(foodPosition);
         this.alive = false;
+        if (typeof this.foodPositionWhenDie !== 'undefined') {
+            this.calcFitness();
+        }
     }
 
     /**
